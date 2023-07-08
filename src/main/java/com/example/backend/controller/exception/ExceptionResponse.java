@@ -18,17 +18,17 @@ public class ExceptionResponse {
     private final String message;
     private final String details;
 
-    public static ResponseEntity<ExceptionResponse> toResponseEntity(ExceptionCode exceptionCode, WebRequest request){
+    public static ResponseEntity<ExceptionResponse> toResponseEntity(ErrorType errorType, WebRequest request){
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         String currentTimestampToString = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currentTimestamp);
         return ResponseEntity
-                .status(exceptionCode.getStatus())
+                .status(errorType.getStatus())
                 .body(ExceptionResponse.builder()
                         .timestamp(currentTimestampToString)
-                        .status(exceptionCode.getStatus().value())
-                        .error(exceptionCode.getStatus().name())
-                        .code(exceptionCode.name())
-                        .message(exceptionCode.getMessage())
+                        .status(errorType.getStatus().value())
+                        .error(errorType.getStatus().name())
+                        .code(errorType.name())
+                        .message(errorType.getMessage())
                         .details(request.getDescription(false))
                         .build());
     }

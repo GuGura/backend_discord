@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class CustomException extends RuntimeException{
-    private final ExceptionCode exceptionCode;
+    private final ErrorType errorType;
 
-    public CustomException(ExceptionCode exceptionCode) {
-        super(exceptionCode.getMessage());
-        this.exceptionCode = exceptionCode;
+    public CustomException(ErrorType errorType) {
+        super(errorType.getMessage());
+        this.errorType = errorType;
     }
 }

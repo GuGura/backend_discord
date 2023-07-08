@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.controller.exception.CustomizedResponseEntityExceptionHandler;
 import com.example.backend.security.filter.AuthorizationFilter;
 import com.example.backend.security.filter.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +60,8 @@ public class SecurityConfig {
     //                .antMatchers(HttpMethod.OPTIONS,"**").permitAll()
                     .anyRequest().authenticated()
                 .and()
-                .apply(new MyCustomDsl()).and()
-                .build();
+                    .apply(new MyCustomDsl())
+                .and().build();
     }
 
 }

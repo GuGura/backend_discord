@@ -1,8 +1,9 @@
 package com.example.backend.config;
 
-import com.example.backend.controller.exception.CustomizedResponseEntityExceptionHandler;
 import com.example.backend.security.filter.AuthorizationFilter;
 import com.example.backend.security.filter.LoginFilter;
+import com.example.backend.service.JwtService;
+import com.example.backend.service.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,15 +25,15 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final CorsFilter corsFilter;
-
-    //    private final JwtService jwtService;
+    private final SignService signService;
+    private final JwtService jwtService;
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http
                     .addFilter(corsFilter) //@CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
-                    .addFilterAt(new LoginFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterAt(new LoginFilter(authenticationManager,signService,jwtService), UsernamePasswordAuthenticationFilter.class)
                     .addFilterAt(new AuthorizationFilter(authenticationManager), BasicAuthenticationFilter.class);
         }
     }

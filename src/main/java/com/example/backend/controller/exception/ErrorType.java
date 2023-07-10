@@ -28,12 +28,9 @@ public enum ErrorType {
     USER_PASSWORD_EMPTY(HttpStatus.NOT_FOUND,"패스워드가 입력되지 않았습니다."),
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT,"기존 유저가 존재합니다."),
-
     ;
-
     private final HttpStatus status;
     private final String message;
-
 
     public static Map<String,Object> findErrorTypeByMessage(String message){
         Map<String,Object> resultError = new LinkedHashMap<>();

@@ -22,5 +22,4 @@ public enum SuccessType {
 
     private final HttpStatus status;
     private final String message;
-
 }

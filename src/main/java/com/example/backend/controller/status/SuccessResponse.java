@@ -15,6 +15,7 @@ public class SuccessResponse {
     private final String timestamp;
     private final int status;
     private final String message;
+    private final Object data;
 
     public static ResponseEntity<SuccessResponse> toResponseEntity(SuccessType successType){
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
@@ -22,6 +23,18 @@ public class SuccessResponse {
         return ResponseEntity
                 .status(successType.getStatus())
                 .body(SuccessResponse.builder()
+                        .timestamp(currentTimestampToString)
+                        .status(successType.getStatus().value())
+                        .message(successType.getMessage())
+                        .build());
+    }
+    public static ResponseEntity<SuccessResponse> toResponseEntity(Object data,SuccessType successType){
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        String currentTimestampToString = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currentTimestamp);
+        return ResponseEntity
+                .status(successType.getStatus())
+                .body(SuccessResponse.builder()
+                        .data(data)
                         .timestamp(currentTimestampToString)
                         .status(successType.getStatus().value())
                         .message(successType.getMessage())

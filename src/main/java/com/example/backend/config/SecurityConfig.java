@@ -1,6 +1,6 @@
 package com.example.backend.config;
 
-import com.example.backend.security.filter.AuthorizationFilter;
+import com.example.backend.security.filter.JwtAuthorizationFilter;
 import com.example.backend.security.filter.LoginFilter;
 import com.example.backend.service.JwtService;
 import com.example.backend.service.SignService;
@@ -34,7 +34,7 @@ public class SecurityConfig {
             http
                     .addFilter(corsFilter) //@CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
                     .addFilterAt(new LoginFilter(authenticationManager,signService,jwtService), UsernamePasswordAuthenticationFilter.class)
-                    .addFilterAt(new AuthorizationFilter(authenticationManager), BasicAuthenticationFilter.class);
+                    .addFilterAt(new JwtAuthorizationFilter(authenticationManager,jwtService), BasicAuthenticationFilter.class);
         }
     }
     @Bean

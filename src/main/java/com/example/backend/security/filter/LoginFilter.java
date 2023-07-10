@@ -63,13 +63,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         ObjectNode responseJson = om.createObjectNode();
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
         User user = principalDetails.getUser();
-        System.out.println(user);
         Map<String, Object> accessJwtMap = jwtService.createAccessToken(user.getId(), user.getUsername(), user.getRole());
         Map<String, Object> refreshJwtMap = jwtService.createRefreshToken(user.getUsername(), user.getRole());
 
         JwtToken jwtToken = jwtService.createTokenDto(user.getUsername(), accessJwtMap, refreshJwtMap);
         //삭제 로직을 넣거나 업데이트 시켜야함
-        jwtService.saveToken(jwtToken);
+        jwtService.saveJwt(jwtToken);
 
         response.addHeader(JwtProperties.HEADER_ACCESS, JwtProperties.TOKEN_PREFIX + jwtToken.getAccessJwt());
         response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + jwtToken.getRefreshJwt());

@@ -13,14 +13,18 @@ public interface TokenMapper {
 
     @Insert("INSERT INTO jwt (username,accessJwt,refreshJwt, create_date, accessJwtExpires_date, refreshJwtExpires_date)" +
             "VALUES (#{username} ,#{accessJwt} ,#{refreshJwt} ,#{create_date} ,#{accessJwtExpires_date},#{refreshJwtExpires_date})")
-    void saveToken(JwtToken jwtToken);
+    void saveJwt(JwtToken jwtToken);
 
-    @Select("SELECT * FROM token where EMAIL = #{email}")
-    Optional<JwtToken> findTokenByEmail(JwtToken jwtToken);
+    @Select("SELECT * FROM jwt where username = #{username}")
+    Optional<JwtToken> findJwtByUsername(JwtToken jwtToken);
 
-    @Update("UPDATE token SET ACCESS_TOKEN = #{accessToken}, REFRESH_TOKEN = #{refreshToken},CREATE_DATE = #{create_Date},ACCESS_TOKEN_EXPIRES_DATE=#{accessTokenExpires_Date} ,REFRESH_TOKEN_EXPIRES_DATE = #{refreshTokenExpires_Date} WHERE EMAIL = #{email}")
-    void updateToken(JwtToken jwtToken);
+    @Update("UPDATE jwt SET accessJwt = #{accessJwt}," +
+            " refreshJwt = #{refreshJwt}," +
+            "create_date = #{create_date}," +
+            "accessJwtExpires_date=#{accessJwtExpires_date} " +
+            ",refreshJwtExpires_date = #{refreshJwtExpires_date} WHERE username = #{username}")
+    void updateJwt(JwtToken jwtToken);
 
-    @Select("SELECT * FROM token where EMAIL = #{email} and REFRESH_TOKEN = #{refreshToken} and REFRESH_TOKEN_EXPIRES_DATE = #{refreshTokenExpires_Date}")
+    @Select("SELECT * FROM jwt where EMAIL = #{email} and REFRESH_TOKEN = #{refreshToken} and REFRESH_TOKEN_EXPIRES_DATE = #{refreshTokenExpires_Date}")
     Optional<JwtToken> findTokenByALL(JwtToken jwtToken);
 }

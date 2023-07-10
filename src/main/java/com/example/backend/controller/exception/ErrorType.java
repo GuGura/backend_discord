@@ -17,6 +17,9 @@ public enum ErrorType {
     USER_INPUT_DATA_FAIL(HttpStatus.BAD_REQUEST,"UserDTO inputData() 에러"),
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     MAIL_AUTHENTICATE_CODE_FAIL(HttpStatus.UNAUTHORIZED,"인증번호가 불일치 합니다."),
+    TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED,"토큰을 찾을 수 없습니다."),
+    TOKEN_NOT_BEARER(HttpStatus.UNAUTHORIZED,"Bearer Token이 아닙니다."),
+    TOKEN_NOT_EXIST_USERNAME(HttpStatus.UNAUTHORIZED,"토큰 내부에 UserName이 없습니다.(getClaim: 매개변수 확인필요)"),
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"유저를 찾을 수 없습니다."),
     USER_EMPTY(HttpStatus.NOT_FOUND,"입력칸이 비어 있습니다."),

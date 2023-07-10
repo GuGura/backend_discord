@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
 
 @Data
 @NoArgsConstructor
@@ -15,12 +16,12 @@ public class JwtToken {
     private String username;
     private String accessJwt;
     private String refreshJwt;
-    private Timestamp create_date;
-    private Timestamp accessJwtExpires_date;
-    private Timestamp refreshJwtExpires_date;
+    private Date create_date;
+    private Date accessJwtExpires_date;
+    private Date refreshJwtExpires_date;
 
     @Builder
-    public JwtToken(String username, String accessJwt, String refreshJwt, Timestamp create_date, Timestamp accessJwtExpires_date, Timestamp refreshJwtExpires_date) {
+    public JwtToken(String username, String accessJwt, String refreshJwt, Date create_date, Date accessJwtExpires_date, Date refreshJwtExpires_date) {
         this.username = username;
         this.accessJwt = accessJwt;
         this.refreshJwt = refreshJwt;

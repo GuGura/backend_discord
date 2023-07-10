@@ -2,19 +2,15 @@ package com.example.backend.security.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.backend.controller.exception.CustomException;
-import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.model.JwtToken;
 import com.example.backend.model.User;
 import com.example.backend.properties.JwtProperties;
 import com.example.backend.security.PrincipalDetails;
 import com.example.backend.service.JwtService;
 import com.example.backend.util.ConvenienceUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -23,8 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;

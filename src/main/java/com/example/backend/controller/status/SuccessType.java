@@ -17,6 +17,7 @@ public enum SuccessType {
     SIGNUP_SUCCESS(HttpStatus.CREATED,"회원가입 성공"),
     MAIL_SEND_SUCCESS(HttpStatus.CREATED,"메일 전송 성공"),
     MAIL_AUTHENTICATE_CODE_SUCCESS(HttpStatus.CREATED,"인증번호가 일치합니다."),
+    REFRESH_TOKEN_SUCCESS_GET(HttpStatus.CREATED,"JWT 재발급완료"),
     ;
 
     private final HttpStatus status;

@@ -2,11 +2,15 @@ package com.example.backend.security.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.backend.controller.exception.CustomException;
+import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.model.JwtToken;
 import com.example.backend.model.User;
 import com.example.backend.properties.JwtProperties;
 import com.example.backend.security.PrincipalDetails;
 import com.example.backend.service.JwtService;
+import com.example.backend.util.ConvenienceUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +23,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,30 +41,29 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         boolean requestURI = isExceptRequest(request);
-        String username;
-        if (!requestURI) {
-            try {
+        try {
+            if (!requestURI) {
                 String tokenType = jwtService.findTokenType(request);
                 System.out.println("1. 권한이나 인증이 필요한 요청이 전달됨: " + tokenType);
                 String jwtToken = jwtService.getTokenFromHeader(request, tokenType);
                 DecodedJWT jwt = jwtService.decodedJWT(jwtToken);
-                username = jwtService.getClaim(jwt, "username", String.class);
+                String username = jwtService.getClaim(jwt, "username", String.class);
                 User user = jwtService.findUserByUsername(username);
-                if (tokenType.equals(JwtProperties.HEADER_REFRESH)) response = refreshJwtProcess(user,response);
+                if (tokenType.equals(JwtProperties.HEADER_REFRESH)) response = refreshJwtProcess(user, response);
                 PrincipalDetails principalDetails = new PrincipalDetails(user);
                 Authentication authentication =
                         new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                request.setAttribute("user_id",user.getId());;
+                request.setAttribute("user_id", user.getId());
                 System.out.println("Success");
-            }catch (Exception e){
-                System.out.println(e.getMessage());
             }
+            super.doFilterInternal(request, response, chain);
+        } catch (Exception e) {
+            thisExceptionHandler(e,request,response);
         }
-        super.doFilterInternal(request, response, chain);
     }
 
-    public HttpServletResponse refreshJwtProcess(User user,HttpServletResponse response) throws CustomException{
+    public HttpServletResponse refreshJwtProcess(User user, HttpServletResponse response) throws CustomException {
         Map<String, Object> accessJwtMap = jwtService.createAccessToken(user.getId(), user.getUsername(), user.getRole());
         Map<String, Object> refreshJwtMap = jwtService.createRefreshToken(user.getUsername(), user.getRole());
         JwtToken jwt = jwtService.createTokenDto(user.getUsername(), accessJwtMap, refreshJwtMap);
@@ -66,6 +71,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         response.addHeader(JwtProperties.HEADER_ACCESS, JwtProperties.TOKEN_PREFIX + jwt.getAccessJwt());
         response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + jwt.getRefreshJwt());
         return response;
+    }
+    public void thisExceptionHandler(Exception e,HttpServletRequest request, HttpServletResponse response) throws IOException{
+        String currentTimestampToString = ConvenienceUtil.currentTimestamp();
+        Map<String, Object> exceptionInfo = ErrorType.findErrorTypeByMessage(e.getMessage());
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode responseJson = om.createObjectNode();
+        responseJson.put("timestamp", currentTimestampToString);
+        responseJson.put("status", (int) exceptionInfo.get("status"));
+        responseJson.put("error", (String) exceptionInfo.get("error"));
+        responseJson.put("code", ((ErrorType) exceptionInfo.get("code")).name());
+        responseJson.put("message", e.getMessage());
+        responseJson.put("details", request.getRequestURI());
+
+        String formattedJson = om.writer().withDefaultPrettyPrinter().writeValueAsString(responseJson);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json"); // JSON 형식으로 설정
+        response.setStatus((int) exceptionInfo.get("status"));
+        response.getWriter().write(formattedJson);
     }
 
     public boolean isExceptRequest(HttpServletRequest request) {

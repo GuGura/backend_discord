@@ -105,7 +105,7 @@ public class JwtService {
             String index = iterator.next();
             if (index.contains("jwt")) return index.replace("jwt", "Jwt");
         }
-        throw new CustomException(ErrorType.TOKEN_NOT_FOUND);
+        return null;
     }
 
     public String getTokenFromHeader(HttpServletRequest request, String tokenType) throws CustomException{
@@ -120,9 +120,13 @@ public class JwtService {
     }
 
     public DecodedJWT decodedJWT(String jwtToken) throws CustomException{
-        return JWT.require(Algorithm.HMAC512(secretKey))
-                .build()
-                .verify(jwtToken);
+        try{
+            return JWT.require(Algorithm.HMAC512(secretKey))
+                    .build()
+                    .verify(jwtToken);
+        }catch (Exception e){
+            throw new CustomException(ErrorType.TOKEN_EXPIRED);
+        }
     }
 
     public <T> T getClaim(DecodedJWT token, String key, Class<T> valueType) {

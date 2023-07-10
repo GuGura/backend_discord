@@ -7,6 +7,7 @@ import com.example.backend.properties.JwtProperties;
 import com.example.backend.security.PrincipalDetails;
 import com.example.backend.service.JwtService;
 import com.example.backend.service.SignService;
+import com.example.backend.util.ConvenienceUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, Object> refreshJwtMap = jwtService.createRefreshToken(user.getUsername(), user.getRole());
 
         JwtToken jwtToken = jwtService.createTokenDto(user.getUsername(), accessJwtMap, refreshJwtMap);
-        //삭제 로직을 넣거나 업데이트 시켜야함
         jwtService.saveJwt(jwtToken);
 
         response.addHeader(JwtProperties.HEADER_ACCESS, JwtProperties.TOKEN_PREFIX + jwtToken.getAccessJwt());
@@ -80,8 +80,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        String currentTimestampToString = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currentTimestamp);
+        String currentTimestampToString = ConvenienceUtil.currentTimestamp();
         Map<String, Object> exceptionInfo = ErrorType.findErrorTypeByMessage(failed.getMessage());
 
         ObjectMapper om = new ObjectMapper();

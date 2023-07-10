@@ -19,6 +19,7 @@ public enum ErrorType {
     MAIL_AUTHENTICATE_CODE_FAIL(HttpStatus.UNAUTHORIZED,"인증번호가 불일치 합니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED,"토큰을 찾을 수 없습니다."),
     TOKEN_NOT_BEARER(HttpStatus.UNAUTHORIZED,"Bearer Token이 아닙니다."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED,"토큰 유효기간이 만료되었습니다"),
     TOKEN_NOT_EXIST_USERNAME(HttpStatus.UNAUTHORIZED,"토큰 내부에 UserName이 없습니다.(getClaim: 매개변수 확인필요)"),
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"유저를 찾을 수 없습니다."),

@@ -59,7 +59,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             }
             super.doFilterInternal(request, response, chain);
         } catch (Exception e) {
-            thisExceptionHandler(e,request,response);
+            ConvenienceUtil.jwtExceptionHandler(e,request,response);
         }
     }
 
@@ -71,24 +71,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         response.addHeader(JwtProperties.HEADER_ACCESS, JwtProperties.TOKEN_PREFIX + jwt.getAccessJwt());
         response.addHeader(JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + jwt.getRefreshJwt());
         return response;
-    }
-    public void thisExceptionHandler(Exception e,HttpServletRequest request, HttpServletResponse response) throws IOException{
-        String currentTimestampToString = ConvenienceUtil.currentTimestamp();
-        Map<String, Object> exceptionInfo = ErrorType.findErrorTypeByMessage(e.getMessage());
-        ObjectMapper om = new ObjectMapper();
-        ObjectNode responseJson = om.createObjectNode();
-        responseJson.put("timestamp", currentTimestampToString);
-        responseJson.put("status", (int) exceptionInfo.get("status"));
-        responseJson.put("error", (String) exceptionInfo.get("error"));
-        responseJson.put("code", ((ErrorType) exceptionInfo.get("code")).name());
-        responseJson.put("message", e.getMessage());
-        responseJson.put("details", request.getRequestURI());
-
-        String formattedJson = om.writer().withDefaultPrettyPrinter().writeValueAsString(responseJson);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json"); // JSON 형식으로 설정
-        response.setStatus((int) exceptionInfo.get("status"));
-        response.getWriter().write(formattedJson);
     }
 
     public boolean isExceptRequest(HttpServletRequest request) {

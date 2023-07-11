@@ -34,6 +34,7 @@ public class ChannelService {
 
     public List<MyChannelsDTO> getMyChannels(int userUID) {
         List<MyChannelsDTO> list = new ArrayList<MyChannelsDTO>(channelMapper.findChannelsByUserUID(userUID));
+        System.out.println("getMyChannels: " + channelMapper.findChannelsByUserUID(userUID));
         list.add(getChannelType(userUID, "addServer", "/img/channelList/add_channel.png", "addServer"));
         list.add(getChannelType(userUID, "public", "/img/channelList/public_icon.png", "public"));
         return list;
@@ -62,10 +63,10 @@ public class ChannelService {
 //    }
 //
     public MyChannelsDTO createChannel(int userUID, String fileURL, String channelName) throws IOException {
-        channelMapper.saveChannel(channelName,userUID);
-        int channel_UID = channelMapper.findChannelUIDByUserUID(channelName,userUID);
+        channelMapper.saveChannel(channelName, userUID);
+        int channel_UID = channelMapper.findChannelUIDByUserUID(channelName, userUID);
 
-        if (!fileURL.equals("/img/sidebar/choose.png")){
+        if (!fileURL.equals("/img/sidebar/choose.png")) {
             String base64 = fileURL.substring(fileURL.lastIndexOf(",") + 1);
             String fileName = base64.substring(30, 50) + ".png";
             BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
@@ -73,7 +74,7 @@ public class ChannelService {
             Path imgPath = Paths.get(folderPath, fileName);
             ImageIO.write(image, "png", imgPath.toFile());
             fileURL = imgPath.toString();
-            channelMapper.updateChannelIcon(fileURL,channel_UID);
+            channelMapper.updateChannelIcon(fileURL, channel_UID);
         }
         channelMapper.saveChannelUser(channel_UID, userUID, "ROLE_ADMIN");
         return channelMapper.findLastChannelByUserUID(userUID);

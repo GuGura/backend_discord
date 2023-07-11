@@ -11,10 +11,10 @@ import java.util.Optional;
 @Mapper
 public interface ChannelMapper {
 
-    @Select("select u.channel_uid, u.user_uid, c.channel_title, c.channel_icon_url, c.channel_type,c.channel_invite_code " +
+    @Select("select u.channel_uid, u.user_uid, c.channel_title, c.channel_icon_url, c.channel_type, c.channel_invite_code " +
             "from channel_user u " +
             "left join channel c on u.channel_uid = c.channel_uid " +
-            "where u.channel_uid = #{userUID} order by channel_user_join_date desc")
+            "where u.user_uid = #{userUID} order by channel_user_join_date desc")
     List<MyChannelsDTO> findChannelsByUserUID(@Param("userUID") int userUID);
 
 

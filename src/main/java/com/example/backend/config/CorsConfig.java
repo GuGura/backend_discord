@@ -1,6 +1,6 @@
 package com.example.backend.config;
 
-import com.example.backend.properties.JwtProperties;
+import com.example.backend.security.filter.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

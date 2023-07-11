@@ -10,10 +10,9 @@ import com.example.backend.mapper.TokenMapper;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.JwtToken;
 import com.example.backend.model.User;
-import com.example.backend.properties.JwtProperties;
+import com.example.backend.security.filter.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;

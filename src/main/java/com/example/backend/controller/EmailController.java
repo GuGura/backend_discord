@@ -6,7 +6,7 @@ import com.example.backend.controller.status.SuccessResponse;
 import com.example.backend.controller.status.SuccessType;
 import com.example.backend.model.MailForm;
 import com.example.backend.service.EmailService;
-import com.example.backend.service.SignService;
+import com.example.backend.service.UserService;
 import com.example.backend.util.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class EmailController {
 
     private final EmailService emailService;
-    private final SignService signService;
+    private final UserService userService;
 
     @PostMapping("/sendMail")
     public ResponseEntity<?> sendMail(@RequestBody(required = false) Map<String, String> param) {
@@ -31,7 +31,7 @@ public class EmailController {
         String username = param.get("username");
         if (username == null || username.equals(""))
             throw new CustomException(ErrorType.USER_EMPTY);
-        if (signService.findUserByUsername(username).isPresent())
+        if (userService.findUserByUsername(username).isPresent())
             throw new CustomException(ErrorType.USER_ALREADY_EXISTS);
         emailService.save(username, authCode);
 

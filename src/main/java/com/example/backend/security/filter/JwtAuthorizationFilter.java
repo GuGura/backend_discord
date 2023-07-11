@@ -1,10 +1,11 @@
 package com.example.backend.security.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.backend.controller.ControllerProperties;
 import com.example.backend.controller.exception.CustomException;
 import com.example.backend.model.JwtToken;
 import com.example.backend.model.User;
-import com.example.backend.properties.JwtProperties;
+import com.example.backend.security.filter.jwt.JwtProperties;
 import com.example.backend.security.PrincipalDetails;
 import com.example.backend.service.JwtService;
 import com.example.backend.util.ConvenienceUtil;
@@ -48,11 +49,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 Authentication authentication =
                         new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                request.setAttribute("user_id", user.getId());
+                request.setAttribute(ControllerProperties.userUID, user.getId());
                 System.out.println("Success");
             }
             super.doFilterInternal(request, response, chain);
-        } catch (Exception e) {
+        } catch (CustomException e) {
             ConvenienceUtil.jwtExceptionHandler(e,request,response);
         }
     }

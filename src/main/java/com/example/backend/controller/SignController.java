@@ -5,7 +5,7 @@ import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.controller.status.SuccessResponse;
 import com.example.backend.controller.status.SuccessType;
 import com.example.backend.model.UserDTO;
-import com.example.backend.service.SignService;
+import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.Map;
 
+import static com.example.backend.controller.status.SuccessType.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sign")
 public class SignController {
 
-    private final SignService signService;
+    private final UserService userService;
 
     /**
      *  정규식 해야함
@@ -35,7 +37,7 @@ public class SignController {
                 throw new CustomException(ErrorType.USER_EMPTY);
             userDTO.InputData(index,params.get(index));
         });
-        signService.SignUp(userDTO);
-        return SuccessResponse.toResponseEntity(SuccessType.SIGNUP_SUCCESS);
+        userService.SignUp(userDTO);
+        return SuccessResponse.toResponseEntity(SIGNUP_SUCCESS);
     }
 }

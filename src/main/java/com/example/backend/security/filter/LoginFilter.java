@@ -3,10 +3,10 @@ package com.example.backend.security.filter;
 import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.model.JwtToken;
 import com.example.backend.model.User;
-import com.example.backend.properties.JwtProperties;
+import com.example.backend.security.filter.jwt.JwtProperties;
 import com.example.backend.security.PrincipalDetails;
 import com.example.backend.service.JwtService;
-import com.example.backend.service.SignService;
+import com.example.backend.service.UserService;
 import com.example.backend.util.ConvenienceUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -32,7 +32,7 @@ import java.util.Optional;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final SignService signService;
+    private final UserService userService;
     private final JwtService jwtService;
 
     @Override
@@ -41,10 +41,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         try {
             User user = om.readValue(request.getInputStream(), User.class);
 
-            Optional<User> result = signService.findUserByUsername(user.getUsername());
+            Optional<User> result = userService.findUserByUsername(user.getUsername());
             if (result.isEmpty()) throw new UsernameNotFoundException(ErrorType.USER_NOT_FOUND.getMessage());
             result.ifPresent(userDTO -> {
-                boolean isMatch = signService.matchesPassword(user.getPassword(), userDTO.getPassword());
+                boolean isMatch = userService.matchesPassword(user.getPassword(), userDTO.getPassword());
                 if (!isMatch) throw new BadCredentialsException(ErrorType.USER_PASSWORD_WRONG.getMessage());
             });
 

@@ -29,6 +29,7 @@ public enum ErrorType {
     USER_EMPTY(HttpStatus.NOT_FOUND,"입력칸이 비어 있습니다."),
     USER_PASSWORD_WRONG(HttpStatus.NOT_FOUND,"잘못된 패스워드입니다."),
     USER_PASSWORD_EMPTY(HttpStatus.NOT_FOUND,"패스워드가 입력되지 않았습니다."),
+    CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 채널을 찾을 수 없습니다."),
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT,"기존 유저가 존재합니다."),
     ;

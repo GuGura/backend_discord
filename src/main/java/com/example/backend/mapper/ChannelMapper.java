@@ -2,6 +2,7 @@ package com.example.backend.mapper;
 
 
 import com.example.backend.model.Channel;
+import com.example.backend.model.ChannelMember;
 import com.example.backend.model.MyChannelsDTO;
 import org.apache.ibatis.annotations.*;
 
@@ -39,13 +40,13 @@ public interface ChannelMapper {
             " from channel_user u left join channel c on u.channel_uid = c.channel_uid " +
             " where u.user_uid = #{userUID} order by channel_user_join_date desc limit 1")
     MyChannelsDTO findLastChannelByUserUID(@Param("userUID") int userUID);
-//
-//    @Select("SELECT * FROM channel WHERE CHANNEL_INVITE_CODE = #{inviteCode}")
-//    Optional<Channel> findChannelByInviteCode(String inviteCode);
-//
-//    @Select("SELECT * FROM channel_user WHERE MEMBER_UID = #{memberUID} and CHANNEL_UID = #{channelUID}")
-//    Optional<ChannelMember> findChannelMemberByMemberUID(int memberUID,int channelUID);
-//
+
+    @Select("SELECT * FROM channel WHERE channel_invite_code = #{inviteCode} and channel_invite_code_activate = true")
+    Optional<Channel> findChannelByInviteCode(@Param("inviteCode") String inviteCode);
+
+    @Select("SELECT * FROM channel_user WHERE user_uid = #{userUID} and channel_uid = #{channelUID}")
+    Optional<ChannelMember> findChannelUserByUserUID(@Param("userUID") int userUID, @Param("channelUID") int channelUID);
+
 //    @Delete("delete FROM channel_user WHERE CHANNEL_UID = #{channelUID} and MEMBER_UID = #{memberUID}")
 //    void deleteChannelMember(int channelUID, int memberUID);
 //

@@ -33,11 +33,11 @@ public class ChannelController {
         return SuccessResponse.toResponseEntity(myChannelDTO, SuccessType.CREATE_CHANNEL);
     }
 
-//    @GetMapping("/channel/attend/{inviteCode}")
-//    public ResponseEntity<?> attendChannel(@PathVariable("inviteCode")String inviteCode, HttpServletRequest request){
-//        int memberUID =(int) request.getAttribute(ResultDtoProperties.USER_UID);
-//        return channelService.getAttendChannel(inviteCode,memberUID);
-//    }
+    @GetMapping("/channel/attend/{inviteCode}")
+    public ResponseEntity<?> attendChannel(@PathVariable("inviteCode") String inviteCode, HttpServletRequest request) {
+        int userUID = (int)request.getAttribute(ControllerProperties.userUID);
+        return channelService.getAttendChannel(inviteCode, userUID);
+    }
 //    @DeleteMapping("/channel/leaveChannel/{channelUID}")
 //    public ResponseEntity<?> leaveChannel(@PathVariable("channelUID") String channelUID,HttpServletRequest request){
 //        int channel_UID = Integer.parseInt(channelUID);

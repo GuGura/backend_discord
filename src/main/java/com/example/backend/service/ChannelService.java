@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.example.backend.controller.exception.CustomException;
+import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.mapper.ChannelMapper;
 import com.example.backend.model.Channel;
 import com.example.backend.model.MyChannelsDTO;
@@ -35,9 +37,9 @@ public class ChannelService {
 
     public List<MyChannelsDTO> getMyChannels(int userUID) {
         List<MyChannelsDTO> list = new ArrayList<MyChannelsDTO>(channelMapper.findChannelsByUserUID(userUID));
-        List.of(list).forEach(items->{
-            for(MyChannelsDTO item: items) {
-                if(item.getChannel_icon_url() != null){
+        List.of(list).forEach(items -> {
+            for (MyChannelsDTO item : items) {
+                if (item.getChannel_icon_url() != null) {
                     String base64Img = ConvenienceUtil.base64EncoderToImg(item.getChannel_icon_url());
                     item.setChannel_icon_url(base64Img);
                 }
@@ -58,18 +60,20 @@ public class ChannelService {
                 .build();
     }
 
-    //    public ResponseEntity<?> getAttendChannel(String inviteCode, int memberUID) {
-//        Channel channel = channelMapper.findChannelByInviteCode(inviteCode).orElse(null);
-//        if (channel == null)
-//            return new ResponseEntity<>("채널을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-//        ChannelMember channelMember = channelMapper.findChannelMemberByMemberUID(memberUID, channel.getChannel_UID()).orElse(null);
-//        if (channelMember != null)
-//            return new ResponseEntity<>("이미 가입하신 채널입니다.", HttpStatus.NOT_FOUND);
-//        channelMapper.saveChannelMember(channel.getChannel_UID(), memberUID, "ROLE_USER");
-//        MyChannelsDTO myChannelsDTO = channelMapper.findLastChannelByMemberUID(memberUID);
-//        return new ResponseEntity<>(myChannelsDTO, HttpStatus.CREATED);
-//    }
-//
+    public ResponseEntity<?> getAttendChannel(String inviteCode, int userUID){
+        channelMapper.findChannelByInviteCode(inviteCode).orElseThrow(() -> new CustomException(ErrorType.CHANNEL_NOT_FOUND));
+        channelMapper.findChannelByInviteCode(inviteCode).ifPresent(channelDTO ->{
+            int channelUID = channelDTO.getChannel_uid();
+            boolean isMyChannel = channelMapper.findChannelUserByUserUID(channelUID,userUID).isPresent();
+            if (isMyChannel)
+                throw new CustomException(ErrorType.USER_ALREADY_EXISTS);
+            else
+                channelMapper.saveChannelUser(channelUID,userUID,"ROLE_USER");
+        });
+        MyChannelsDTO myChannelsDTO = channelMapper.findLastChannelByUserUID(userUID);
+        return new ResponseEntity<>(myChannelsDTO, HttpStatus.CREATED);
+    }
+
     public MyChannelsDTO createChannel(int userUID, String fileURL, String channelName) throws IOException {
         channelMapper.saveChannel(channelName, userUID);
         int channel_UID = channelMapper.findChannelUIDByUserUID(channelName, userUID);
@@ -86,8 +90,8 @@ public class ChannelService {
         }
         channelMapper.saveChannelUser(channel_UID, userUID, "ROLE_ADMIN");
         MyChannelsDTO myChannelsDTO = channelMapper.findLastChannelByUserUID(userUID);
-        Collections.singletonList(myChannelsDTO).forEach(item->{
-            if (item.getChannel_icon_url() != null){
+        Collections.singletonList(myChannelsDTO).forEach(item -> {
+            if (item.getChannel_icon_url() != null) {
                 String base64Img = ConvenienceUtil.base64EncoderToImg(item.getChannel_icon_url());
                 item.setChannel_icon_url(base64Img);
             }

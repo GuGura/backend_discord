@@ -23,6 +23,7 @@ public enum ErrorType {
     TOKEN_NOT_EXIST_USERNAME(HttpStatus.UNAUTHORIZED,"토큰 내부에 UserName이 없습니다.(getClaim: 매개변수 확인필요)"),
     /* 403 Forbidden : 클라이언트는 콘텐츠에 접근할 권리를 가지고 있지 않음*/
     IMG_CREATE_FAIL(HttpStatus.FORBIDDEN,"이미지 생성 실패"),
+    IMG_ENCODER_FAIL(HttpStatus.FORBIDDEN,"Base64 Encoding 실패"),
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"유저를 찾을 수 없습니다."),
     USER_EMPTY(HttpStatus.NOT_FOUND,"입력칸이 비어 있습니다."),

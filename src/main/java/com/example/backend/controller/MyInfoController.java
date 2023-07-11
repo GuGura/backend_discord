@@ -33,7 +33,6 @@ public class MyInfoController {
 
     @GetMapping("/myInfo/channelList")
     public ResponseEntity<?> getMyServerList(HttpServletRequest request){
-        System.out.println("getMyServerList");
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<MyChannelsDTO> list = channelService.getMyChannels(userUID);
         return SuccessResponse.toResponseEntity(list, SuccessType.SUCCESS_GET_CHANNEL);

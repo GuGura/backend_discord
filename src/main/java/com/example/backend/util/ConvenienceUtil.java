@@ -4,6 +4,7 @@ import com.example.backend.controller.exception.CustomException;
 import com.example.backend.controller.exception.ErrorType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.util.FileCopyUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +13,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Map;
 
@@ -22,6 +27,16 @@ public class ConvenienceUtil {
     public static String currentTimestamp() {
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currentTimestamp);
+    }
+    public static String base64EncoderToImg(String fileURL){
+        try {
+            Path path = Paths.get(fileURL);
+            byte[] fileBytes = Files.readAllBytes(path);
+            String base64Data = Base64.getEncoder().encodeToString(fileBytes);
+            String mimeType = Files.probeContentType(path);
+
+            return "data:" + mimeType + ";base64," + base64Data;
+        }catch (Exception e){throw new CustomException(ErrorType.IMG_ENCODER_FAIL);}
     }
 
     public static BufferedImage base64DecoderToImg(String base64) {

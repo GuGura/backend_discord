@@ -36,7 +36,8 @@ public class ChannelController {
     @GetMapping("/channel/attend/{inviteCode}")
     public ResponseEntity<?> attendChannel(@PathVariable("inviteCode") String inviteCode, HttpServletRequest request) {
         int userUID = (int)request.getAttribute(ControllerProperties.userUID);
-        return channelService.getAttendChannel(inviteCode, userUID);
+        MyChannelsDTO myChannelDTO = channelService.getAttendChannel(inviteCode, userUID);
+        return SuccessResponse.toResponseEntity(myChannelDTO,SuccessType.ATTEND_CHANNEL);
     }
 //    @DeleteMapping("/channel/leaveChannel/{channelUID}")
 //    public ResponseEntity<?> leaveChannel(@PathVariable("channelUID") String channelUID,HttpServletRequest request){

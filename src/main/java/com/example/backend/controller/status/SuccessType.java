@@ -20,6 +20,7 @@ public enum SuccessType {
     MAIL_AUTHENTICATE_CODE_SUCCESS(HttpStatus.CREATED,"인증번호가 일치합니다."),
     REFRESH_TOKEN_SUCCESS_GET(HttpStatus.CREATED,"JWT 재발급완료"),
     CREATE_CHANNEL(HttpStatus.CREATED,"CHANNEL CREATE"),
+    ATTEND_CHANNEL(HttpStatus.CREATED,"ATTEND CREATE"),
     ;
 
     private final HttpStatus status;

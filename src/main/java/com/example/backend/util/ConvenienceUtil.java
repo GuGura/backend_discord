@@ -28,7 +28,8 @@ public class ConvenienceUtil {
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(currentTimestamp);
     }
-    public static String base64EncoderToImg(String fileURL){
+
+    public static String base64EncoderToImg(String fileURL) {
         try {
             Path path = Paths.get(fileURL);
             byte[] fileBytes = Files.readAllBytes(path);
@@ -36,7 +37,9 @@ public class ConvenienceUtil {
             String mimeType = Files.probeContentType(path);
 
             return "data:" + mimeType + ";base64," + base64Data;
-        }catch (Exception e){throw new CustomException(ErrorType.IMG_ENCODER_FAIL);}
+        } catch (Exception e) {
+            throw new CustomException(ErrorType.IMG_ENCODER_FAIL);
+        }
     }
 
     public static BufferedImage base64DecoderToImg(String base64) {
@@ -52,14 +55,18 @@ public class ConvenienceUtil {
         }
     }
 
+    public static String getImgPath() {
+        return System.getProperty("user.home") + "\\upload\\discord\\frontend\\public";
+    }
+
     public static String makeOrGetChannelFolderURL(int channelUID) {
-        String folderURL = System.getProperty("user.home") + "\\upload\\channel\\" + channelUID;
+        String folderURL = getImgPath() + "\\download\\channel\\" + channelUID;
         new File(folderURL).mkdirs();
         return folderURL;
     }
 
     public static String makeOrGetLobbyFolderURL(String userUID) {
-        String folderURL = System.getProperty("user.home") + "\\upload\\lobby\\" + userUID;
+        String folderURL = getImgPath() + "\\download\\lobby\\" + userUID;
         new File(folderURL).mkdirs();
         return folderURL;
     }

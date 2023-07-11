@@ -40,8 +40,9 @@ public class ChannelService {
         List.of(list).forEach(items -> {
             for (MyChannelsDTO item : items) {
                 if (item.getChannel_icon_url() != null) {
-                    String base64Img = ConvenienceUtil.base64EncoderToImg(item.getChannel_icon_url());
-                    item.setChannel_icon_url(base64Img);
+                    String imgURL = item.getChannel_icon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\","/");
+                    item.setChannel_icon_url(imgURL);
                 }
             }
         });
@@ -60,7 +61,7 @@ public class ChannelService {
                 .build();
     }
 
-    public ResponseEntity<?> getAttendChannel(String inviteCode, int userUID){
+    public MyChannelsDTO getAttendChannel(String inviteCode, int userUID){
         channelMapper.findChannelByInviteCode(inviteCode).orElseThrow(() -> new CustomException(ErrorType.CHANNEL_NOT_FOUND));
         channelMapper.findChannelByInviteCode(inviteCode).ifPresent(channelDTO ->{
             int channelUID = channelDTO.getChannel_uid();
@@ -70,8 +71,13 @@ public class ChannelService {
             else
                 channelMapper.saveChannelUser(channelUID,userUID,"ROLE_USER");
         });
-        MyChannelsDTO myChannelsDTO = channelMapper.findLastChannelByUserUID(userUID);
-        return new ResponseEntity<>(myChannelsDTO, HttpStatus.CREATED);
+        MyChannelsDTO list =  channelMapper.findLastChannelByUserUID(userUID);
+        if (list.getChannel_icon_url() != null) {
+            String imgURL = list.getChannel_icon_url().substring(ConvenienceUtil.getImgPath().length());
+            imgURL = imgURL.replace("\\","/");
+            list.setChannel_icon_url(imgURL);
+        }
+        return list;
     }
 
     public MyChannelsDTO createChannel(int userUID, String fileURL, String channelName) throws IOException {

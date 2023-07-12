@@ -33,8 +33,6 @@ public class SignController {
         String[] str = {"username","emailAuthCode","nickname","password"};
         UserDTO userDTO = new UserDTO();
         Arrays.stream(str).forEach(index-> {
-            if(params.get(index) == null)
-                throw new CustomException(ErrorType.USER_EMPTY);
             userDTO.InputData(index,params.get(index));
         });
         userService.SignUp(userDTO);

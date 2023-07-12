@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Map;
 
@@ -65,7 +64,7 @@ public class ConvenienceUtil {
         return folderURL;
     }
 
-    public static String makeOrGetLobbyFolderURL(String userUID) {
+    public static String makeOrGetLobbyFolderURL(int userUID) {
         String folderURL = getImgPath() + "\\download\\lobby\\" + userUID;
         new File(folderURL).mkdirs();
         return folderURL;

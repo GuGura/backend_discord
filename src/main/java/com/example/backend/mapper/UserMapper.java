@@ -26,4 +26,9 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE id = #{id}")
     Optional<User> findUserByUserUIDO(@Param("id") int id);
 
+    @Select("select u.username, u.role, u.join_date, ur.nickname, ur.icon_url, ur.description " +
+            "from user u " +
+            "LEFT JOIN user_resource ur on u.id = ur.user_id " +
+            "where u.id = #{userUID}")
+    Optional<UserDTO> findUserBasicInfoByUserUID(@Param("userUID") int userUID);
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 public enum SuccessType {
     /* 200	OK:	요청을 정상적으로 처리함 */
     SUCCESS_GET_CHANNEL(HttpStatus.OK,"getMyChannels SUCCESS "),
+    SUCCESS_GET_BASIC_USERINFO(HttpStatus.OK,"유저 기본정보 가져옴"),
     /* 201	Created : 성공적으로 생성에 대한 요청을 받었으며 서버가 새 리소스를 작성함 (대개 POST, PUT일 때) */
     SIGNUP_SUCCESS(HttpStatus.CREATED,"회원가입 성공"),
     MAIL_SEND_SUCCESS(HttpStatus.CREATED,"메일 전송 성공"),

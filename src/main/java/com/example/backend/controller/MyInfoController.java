@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.controller.status.SuccessResponse;
 import com.example.backend.controller.status.SuccessType;
 import com.example.backend.model.MyChannelsDTO;
+import com.example.backend.model.UserDTO;
 import com.example.backend.service.ChannelService;
 import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${version}")
@@ -32,22 +34,18 @@ public class MyInfoController {
 //    }
 
     @GetMapping("/myInfo/channelList")
-    public ResponseEntity<?> getMyServerList(HttpServletRequest request){
+    public ResponseEntity<?> getMyServerList(HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<MyChannelsDTO> list = channelService.getMyChannels(userUID);
         return SuccessResponse.toResponseEntity(list, SuccessType.SUCCESS_GET_CHANNEL);
     }
 
-//    @PostMapping("/myInfo/lobby")
-//    public  ResponseEntity<?> getLobbyInfo(HttpServletRequest request){
-//        int memberUID =(int) request.getAttribute(ResultDtoProperties.USER_UID);
-//        Member member = userService.getLobbyInfoByMemberUID(memberUID);
-//        resultDTO = ResultDTO.builder()
-//                .result(UserUtil.memberToReturn(member))
-//                .message("lobby Info callback")
-//                .build();
-//        return new ResponseEntity<>(resultDTO,HttpStatus.OK);
-//    }
+    @PostMapping("/myInfo/basic")
+    public ResponseEntity<?> getLobbyInfo(HttpServletRequest request) {
+        int userUID = (int) request.getAttribute(ControllerProperties.userUID);
+        UserDTO userDTO = userService.getUserBasicInfo(userUID);
+        return SuccessResponse.toResponseEntity(userDTO,SuccessType.SUCCESS_GET_BASIC_USERINFO);
+    }
 //
 //    @PostMapping("/myInfo/friend")
 //    public  ResponseEntity<?> getFriendInfo(@RequestBody Map<String,String> params, HttpServletRequest request){

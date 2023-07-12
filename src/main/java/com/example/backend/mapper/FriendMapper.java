@@ -39,18 +39,17 @@ public interface FriendMapper {
     int findData(@Param("userUID") int userUID, @Param("sendUserUID") int sendUserUID);
 
     @Insert("INSERT INTO friend (friend_sender,friend_receiver) values (#{sendUserUID},#{userUID})")
-    void saveResponse( @Param("userUID") int userUID,@Param("sendUserUID") int sendUserUID);
+    void saveResponse(@Param("userUID") int userUID, @Param("sendUserUID") int sendUserUID);
 
-//
-//    @Select("SELECT ID, USERNAME, USER_ICON_URL\n" +
-//            "FROM member\n" +
-//            "WHERE ID IN\n" +
-//            "      (SELECT FRIEND_RECEIVER\n" +
-//            "       FROM friend\n" +
-//            "       WHERE FRIEND_SENDER = #{memberUID} \n" +
-//            "         and FRIEND_CHECKED = false)")
-//    List<FriendDTO2> fineRequestUsers(@Param("memberUID") int memberUID);
-//
-//    @Update("update friend set FRIEND_CHECKED = true where FRIEND_SENDER = #{memberUID} and FRIEND_RECEIVER = #{friendUID}")
-//    void updateFriend(@Param("memberUID") int memberUID,@Param("friendUID") int friendUID);
+    @Select("SELECT user_id, nickname, icon_url " +
+            "FROM user_resource " +
+            "WHERE user_id IN " +
+            "      (SELECT friend_receiver " +
+            "       FROM friend " +
+            "       WHERE friend_sender = #{userUID} \n" +
+            "         and friend_checked = false)")
+    List<UserDTO> fineRequestUsers(@Param("userUID") int userUID);
+
+    @Update("update friend set friend_checked = true where friend_sender = #{userUID} and friend_receiver = #{friendUID}")
+    void updateFriend(@Param("userUID") int userUID,@Param("friendUID") int friendUID);
 }

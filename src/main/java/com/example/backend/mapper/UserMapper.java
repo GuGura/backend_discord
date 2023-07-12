@@ -19,6 +19,8 @@ public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE username = #{username}")
     Optional<UserDTO> findUserResource(@Param("username") String username);
+    @Select("SELECT * FROM user_resource WHERE user_id = #{userUID}")
+    UserDTO findUserResourceByUserUID(@Param("userUID") int userUID);
 
     @Select("SELECT * FROM user WHERE username = #{username}")
     Optional<User> findUserByUsernameO(@Param("username") String username);

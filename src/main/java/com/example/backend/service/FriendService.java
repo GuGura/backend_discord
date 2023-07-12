@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.controller.exception.CustomException;
 import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.mapper.FriendMapper;
+import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.UserDTO;
 import com.example.backend.model.entity.Friend;
 import com.example.backend.util.ConvenienceUtil;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendService {
     private final FriendMapper friendMapper;
+    private final UserMapper userMapper;
 
     public List<UserDTO> myFriendList(int userUID) {
         List<UserDTO> list = friendMapper.findMyFriendByUserUID(userUID);
@@ -45,8 +47,27 @@ public class FriendService {
         friendMapper.saveRequest(userUID, sendUserUID);
         if (friendMapper.findData(userUID, sendUserUID) != 1)
             throw new CustomException(ErrorType.FRIEND_REQUEST_FAIL);
-        friendMapper.saveResponse(userUID,sendUserUID);
+        friendMapper.saveResponse(userUID, sendUserUID);
     }
+
+    public List<UserDTO> findRequestUsers(int userUID) {
+        List<UserDTO> list = friendMapper.fineRequestUsers(userUID);
+        return getUserDTOS(list);
+    }
+
+    public UserDTO responseFriend(int userUID, int friendUID) {
+        if (friendMapper.findData(userUID, friendUID) == 1)
+            throw new CustomException(ErrorType.USER_ALREADY_FRIEND);
+        friendMapper.updateFriend(userUID, friendUID);
+        UserDTO userDTO = userMapper.findUserResourceByUserUID(friendUID);
+        if (userDTO.getIcon_url() != null) {
+            String imgURL = userDTO.getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+            imgURL = imgURL.replace("\\", "/");
+            userDTO.setIcon_url(imgURL);
+        }
+        return userDTO;
+    }
+
 
 //    public ResultFriend friendToReturn(FriendDTO2 friend) {
 //        ResultFriend Rfriend = new ResultFriend();
@@ -64,21 +85,4 @@ public class FriendService {
 //        return Rfriend;
 //    }
 //
-
-//
-//    public List<ResultFriend> findRequestUsers(int memberUID) {
-//        List<FriendDTO2> list = friendMapper.fineRequestUsers(memberUID);
-//        List<ResultFriend> listToReturn = new ArrayList<>();
-//        for (FriendDTO2 friend : list) {
-//            listToReturn.add(friendToReturn(friend));
-//        }
-//        return listToReturn;
-//    }
-//
-//    public ResponseEntity<?> responseFriend(int memberUID, int friendUID) {
-//        if (friendMapper.findData(memberUID, friendUID) == 1)
-//            return new ResponseEntity<>("이미 친구추가 신청한 상대입니다.", HttpStatus.PAYMENT_REQUIRED);
-//        friendMapper.updateFriend(memberUID, friendUID);
-//        return new ResponseEntity<>("친구수락", HttpStatus.ACCEPTED);
-//    }
 }

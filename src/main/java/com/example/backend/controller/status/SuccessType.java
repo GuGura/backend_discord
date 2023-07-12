@@ -22,7 +22,7 @@ public enum SuccessType {
     REFRESH_TOKEN_SUCCESS_GET(HttpStatus.CREATED,"JWT 재발급완료"),
     CREATE_CHANNEL(HttpStatus.CREATED,"CHANNEL CREATE"),
     ATTEND_CHANNEL(HttpStatus.CREATED,"ATTEND CREATE"),
-    SUCCESS_FIND_SEARCH_USER(HttpStatus.CREATED,"검색한 유저리스트 가져옴"),
+    SUCCESS_FIND_USER(HttpStatus.CREATED,"유저리스트 가져옴"),
     SUCCESS_SEND_FRIEND_REQUEST(HttpStatus.CREATED,"친구 신청 완료"),
     ;
 

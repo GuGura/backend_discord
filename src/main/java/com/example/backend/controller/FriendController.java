@@ -24,7 +24,7 @@ public class FriendController {
     public ResponseEntity<?> getSearchList(@PathVariable("nickname") String nickname, HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<UserDTO> list = friendService.findSearchUsers(nickname, userUID);
-        return SuccessResponse.toResponseEntity(list, SuccessType.SUCCESS_FIND_SEARCH_USER);
+        return SuccessResponse.toResponseEntity(list, SuccessType.SUCCESS_FIND_USER);
     }
 
     @PostMapping("/friend/send/{friendUID}")
@@ -34,17 +34,18 @@ public class FriendController {
         return SuccessResponse.toResponseEntity(SuccessType.SUCCESS_SEND_FRIEND_REQUEST);
     }
 
-//    @GetMapping("/friend/requestUser")
-//    public ResponseEntity<?> requestUserList(HttpServletRequest request){
-//        int memberUID = (int) request.getAttribute(ResultDtoProperties.USER_UID);
-//        List<ResultFriend> list = friendService.findRequestUsers(memberUID);
-//        return new ResponseEntity<>(list,HttpStatus.OK);
-//    }
-//
-//    @PutMapping("/friend/response/{friendUID}")
-//    public ResponseEntity<?> responseFriend(@PathVariable("friendUID") int friendUID,HttpServletRequest request){
-//        int memberUID = (int) request.getAttribute(ResultDtoProperties.USER_UID);
-//        return friendService.responseFriend(memberUID,friendUID);
-//    }
+    @GetMapping("/friend/requestUser")
+    public ResponseEntity<?> requestUserList(HttpServletRequest request){
+        int userUID = (int) request.getAttribute(ControllerProperties.userUID);
+        List<UserDTO> list = friendService.findRequestUsers(userUID);
+        return SuccessResponse.toResponseEntity(list,SuccessType.SUCCESS_FIND_USER);
+    }
+
+    @PutMapping("/friend/response/{friendUID}")
+    public ResponseEntity<?> responseFriend(@PathVariable("friendUID") int friendUID,HttpServletRequest request){
+        int userUID = (int) request.getAttribute(ControllerProperties.userUID);
+        UserDTO user = friendService.responseFriend(userUID,friendUID);
+        return SuccessResponse.toResponseEntity(user,SuccessType.SUCCESS_FIND_USER);
+    }
 
 }

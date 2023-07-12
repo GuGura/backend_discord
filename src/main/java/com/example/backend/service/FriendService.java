@@ -1,10 +1,13 @@
 package com.example.backend.service;
 
+import com.example.backend.controller.exception.CustomException;
+import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.mapper.FriendMapper;
 import com.example.backend.model.UserDTO;
 import com.example.backend.model.entity.Friend;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,28 +17,37 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendService {
     private final FriendMapper friendMapper;
+
     public List<UserDTO> myFriendList(int userUID) {
         List<UserDTO> list = friendMapper.findMyFriendByUserUID(userUID);
-        list.forEach(user ->{
-            if (user.getIcon_url() != null){
+        return getUserDTOS(list);
+    }
+
+    public List<UserDTO> findSearchUsers(String nickname, int userUID) {
+        List<UserDTO> list = friendMapper.findSearchUsers(nickname, userUID);
+        return getUserDTOS(list);
+    }
+
+    private List<UserDTO> getUserDTOS(List<UserDTO> list) {
+        list.forEach(user -> {
+            if (user.getIcon_url() != null) {
                 String imgURL = user.getIcon_url().substring(ConvenienceUtil.getImgPath().length());
-                imgURL = imgURL.replace("\\","/");
+                imgURL = imgURL.replace("\\", "/");
                 user.setIcon_url(imgURL);
             }
         });
         return list;
     }
 
+    public void save(int userUID, int sendUserUID) {
+        if (friendMapper.findData(userUID, sendUserUID) == 1)
+            throw new CustomException(ErrorType.USER_ALREADY_FRIEND);
+        friendMapper.saveRequest(userUID, sendUserUID);
+        if (friendMapper.findData(userUID, sendUserUID) != 1)
+            throw new CustomException(ErrorType.FRIEND_REQUEST_FAIL);
+        friendMapper.saveResponse(userUID,sendUserUID);
+    }
 
-//    public List<ResultFriend> findSearchUsers(String username, int memberUID) {
-//        List<FriendDTO2> list = friendMapper.findSearchUsers(username, memberUID);
-//        List<ResultFriend> listToReturn = new ArrayList<>();
-//        for (FriendDTO2 friend : list) {
-//            listToReturn.add(friendToReturn(friend));
-//        }
-//        return listToReturn;
-//    }
-//
 //    public ResultFriend friendToReturn(FriendDTO2 friend) {
 //        ResultFriend Rfriend = new ResultFriend();
 //        Rfriend.setID(friend.getID());
@@ -52,15 +64,7 @@ public class FriendService {
 //        return Rfriend;
 //    }
 //
-//    public ResponseEntity<?> save(int memberUID, int sendMemberUID) {
-//        if (friendMapper.findData(memberUID, sendMemberUID) == 1)
-//            return new ResponseEntity<>("이미 친구추가 신청한 상대입니다.", HttpStatus.PAYMENT_REQUIRED);
-//        friendMapper.saveRequest(memberUID, sendMemberUID);
-//        if (friendMapper.findData(memberUID, sendMemberUID) != 1)
-//            return new ResponseEntity<>("친구신청 실패", HttpStatus.PAYMENT_REQUIRED);
-//        friendMapper.saveResponse(sendMemberUID, memberUID);
-//        return new ResponseEntity<>("친구신청 완료", HttpStatus.CREATED);
-//    }
+
 //
 //    public List<ResultFriend> findRequestUsers(int memberUID) {
 //        List<FriendDTO2> list = friendMapper.fineRequestUsers(memberUID);

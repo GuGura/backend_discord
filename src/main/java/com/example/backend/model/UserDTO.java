@@ -11,11 +11,13 @@ import java.sql.Timestamp;
 
 @Data
 public class UserDTO {
+    private int id;
     private String username;
     private String password;
     private String role;
     private Timestamp join_date;
 
+    private int user_id;
     private String nickname;
     private String icon_url;
     private String description;

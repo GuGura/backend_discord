@@ -15,6 +15,7 @@ public enum ErrorType {
     /* 400 BAD_REQUEST : 잘못된 요청 */
     MAIL_SEND_FAIL(HttpStatus.BAD_REQUEST,"메일발송 실패"),
     USER_INPUT_DATA_FAIL(HttpStatus.BAD_REQUEST,"UserDTO inputData() 에러"),
+    FRIEND_REQUEST_FAIL(HttpStatus.BAD_REQUEST,"friend save() 실패"),
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     MAIL_AUTHENTICATE_CODE_FAIL(HttpStatus.UNAUTHORIZED,"인증번호가 불일치 합니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED,"토큰을 찾을 수 없습니다."),
@@ -32,6 +33,7 @@ public enum ErrorType {
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 채널을 찾을 수 없습니다."),
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT,"기존 유저가 존재합니다."),
+    USER_ALREADY_FRIEND(HttpStatus.CONFLICT,"이미 친구리스트에 있는 유저입니다."),
     ;
     private final HttpStatus status;
     private final String message;

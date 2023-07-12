@@ -23,24 +23,24 @@ public interface FriendMapper {
             ")")
     List<UserDTO> findMyFriendByUserUID(@Param("userUID") int userUID);
 
-//    @Select("SELECT ID, USERNAME, USER_ICON_URL " +
-//            "FROM member " +
-//            "WHERE USERNAME LIKE '%' #{username} '%' " +
-//            "  AND ID NOT IN (SELECT FRIEND_RECEIVER " +
-//            "                 FROM friend " +
-//            "                 WHERE FRIEND_SENDER = #{memberUID} ) " +
-//            "AND ID != #{memberUID} ")
-//    List<FriendDTO2> findSearchUsers(@Param("username") String username, @Param("memberUID") int memberUID);
-//
-//    @Insert("INSERT INTO friend (FRIEND_SENDER,FRIEND_RECEIVER,FRIEND_CHECKED) values (#{memberUID},#{sendMemberUID},true)")
-//    void saveRequest(@Param("memberUID") int memberUID, @Param("sendMemberUID") int sendMemberUID);
-//
-//    @Select("SELECT count(*) FROM friend where FRIEND_SENDER=#{memberUID} and FRIEND_RECEIVER=#{sendMemberUID} and FRIEND_CHECKED = true")
-//    int findData(@Param("memberUID") int memberUID, @Param("sendMemberUID") int sendMemberUID);
-//
-//    @Insert("INSERT INTO friend (FRIEND_SENDER,FRIEND_RECEIVER) values (#{sendMemberUID},#{memberUID})")
-//    void saveResponse(@Param("sendMemberUID") int sendMemberUID, @Param("memberUID") int memberUID);
-//
+    @Select("SELECT user_id ,nickname, icon_url " +
+            "FROM user_resource " +
+            "WHERE nickname LIKE '%' #{nickname} '%' " +
+            "  AND user_id NOT IN (SELECT friend_receiver " +
+            "                 FROM friend " +
+            "                 WHERE friend_sender = #{userUID} ) " +
+            "AND user_id != #{userUID} ")
+    List<UserDTO> findSearchUsers(@Param("nickname") String nickname, @Param("userUID") int userUID);
+
+    @Insert("INSERT INTO friend (friend_sender,friend_receiver,friend_checked) values (#{userUID},#{sendUserUID},true)")
+    void saveRequest(@Param("userUID") int userUID, @Param("sendUserUID") int sendUserUID);
+
+    @Select("SELECT count(*) FROM friend where friend_sender=#{userUID} and friend_receiver=#{sendUserUID} and friend_checked = true")
+    int findData(@Param("userUID") int userUID, @Param("sendUserUID") int sendUserUID);
+
+    @Insert("INSERT INTO friend (friend_sender,friend_receiver) values (#{sendUserUID},#{userUID})")
+    void saveResponse( @Param("userUID") int userUID,@Param("sendUserUID") int sendUserUID);
+
 //
 //    @Select("SELECT ID, USERNAME, USER_ICON_URL\n" +
 //            "FROM member\n" +

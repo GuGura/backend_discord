@@ -1,6 +1,6 @@
 package com.example.backend.mapper;
 
-import com.example.backend.model.AuthenticationCode;
+import com.example.backend.model.entity.AuthenticationCode;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Optional;

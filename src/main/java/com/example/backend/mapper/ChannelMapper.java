@@ -1,8 +1,8 @@
 package com.example.backend.mapper;
 
 
-import com.example.backend.model.Channel;
-import com.example.backend.model.ChannelMember;
+import com.example.backend.model.entity.Channel;
+import com.example.backend.model.entity.ChannelMember;
 import com.example.backend.model.MyChannelsDTO;
 import org.apache.ibatis.annotations.*;
 

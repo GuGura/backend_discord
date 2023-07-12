@@ -4,7 +4,7 @@ import com.example.backend.controller.exception.CustomException;
 import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.mapper.EmailMapper;
 import com.example.backend.mapper.UserMapper;
-import com.example.backend.model.User;
+import com.example.backend.model.entity.User;
 import com.example.backend.model.UserDTO;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;

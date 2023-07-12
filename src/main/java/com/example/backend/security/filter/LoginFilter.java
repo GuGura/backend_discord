@@ -1,8 +1,8 @@
 package com.example.backend.security.filter;
 
 import com.example.backend.controller.exception.ErrorType;
-import com.example.backend.model.JwtToken;
-import com.example.backend.model.User;
+import com.example.backend.model.entity.JwtToken;
+import com.example.backend.model.entity.User;
 import com.example.backend.security.filter.jwt.JwtProperties;
 import com.example.backend.security.PrincipalDetails;
 import com.example.backend.service.JwtService;

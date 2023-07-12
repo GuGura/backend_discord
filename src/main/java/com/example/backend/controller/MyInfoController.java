@@ -4,10 +4,11 @@ import com.example.backend.controller.status.SuccessResponse;
 import com.example.backend.controller.status.SuccessType;
 import com.example.backend.model.MyChannelsDTO;
 import com.example.backend.model.UserDTO;
+import com.example.backend.model.entity.Friend;
 import com.example.backend.service.ChannelService;
+import com.example.backend.service.FriendService;
 import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ import java.util.Map;
 public class MyInfoController {
     private final ChannelService channelService;
     private final UserService userService;
-//    private final FriendService friendService;
+    private final FriendService friendService;
 
 //    @PutMapping("/myInfo/init")
 //    public ResponseEntity<?> initMyInfo() {
@@ -44,9 +45,10 @@ public class MyInfoController {
     public ResponseEntity<?> getLobbyInfo(HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         UserDTO userDTO = userService.getUserBasicInfo(userUID);
-        return SuccessResponse.toResponseEntity(userDTO,SuccessType.SUCCESS_GET_BASIC_USERINFO);
+        return SuccessResponse.toResponseEntity(userDTO, SuccessType.SUCCESS_GET_BASIC_USERINFO);
     }
-//
+
+    //
 //    @PostMapping("/myInfo/friend")
 //    public  ResponseEntity<?> getFriendInfo(@RequestBody Map<String,String> params, HttpServletRequest request){
 //        Member member = userService.getLobbyInfoByMemberUID(Integer.parseInt(params.get("friendId")));
@@ -58,15 +60,11 @@ public class MyInfoController {
 //                .build();
 //        return new ResponseEntity<>(resultDTO,HttpStatus.OK);
 //    }
-//    @GetMapping("/myInfo/friendList")
-//    public ResponseEntity<?> getFriendList(HttpServletRequest request){
-//        int memberUID =(int) request.getAttribute(ResultDtoProperties.USER_UID);
-//        List<FriendDTO> friendsList = userService.myFriendList(memberUID);
-//        List<ResultFriend> friendsListToReturn = new ArrayList<>();
-//        for (FriendDTO friend: friendsList) {
-//            friendsListToReturn.add(friendService.friendToReturn(friend));
-//        }
-//        System.out.println("getFriendList:"+friendsList);
-//        return new ResponseEntity<>(friendsListToReturn,HttpStatus.OK);
-//    }
+    @GetMapping("/myInfo/friendList")
+    public ResponseEntity<?> getFriendList(HttpServletRequest request) {
+        int userUID = (int) request.getAttribute(ControllerProperties.userUID);
+        List<UserDTO> friendsList = friendService.myFriendList(userUID);
+        System.out.println("getFriendList:" + friendsList);
+        return SuccessResponse.toResponseEntity(friendsList, SuccessType.SUCCESS_GET_BASIC_USERINFO);
+    }
 }

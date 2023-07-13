@@ -2,11 +2,10 @@ package com.example.backend.mapper;
 
 import com.example.backend.model.entity.User;
 import com.example.backend.model.UserDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Mapper
@@ -33,4 +32,10 @@ public interface UserMapper {
             "LEFT JOIN user_resource ur on u.id = ur.user_id " +
             "where u.id = #{userUID}")
     Optional<UserDTO> findUserBasicInfoByUserUID(@Param("userUID") int userUID);
+
+    @Update("Update user_resource SET nickname = #{params.nickname},icon_url = #{params.icon_url} , description = #{params.description} where user_id = #{userUID}")
+    void updateUserResource(@Param("params") Map<String, String> params,@Param("userUID") int userUID);
+
+    @Select("SELECT nickname,icon_url,description FROM user_resource WHERE user_id = #{userUID}")
+    Map<String,String> findUserResourceByUserUIDM(@Param("userUID") int userUID);
 }

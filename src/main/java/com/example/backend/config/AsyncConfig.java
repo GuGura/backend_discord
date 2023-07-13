@@ -35,4 +35,22 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.initialize();
         return executor;
     }
+    @Bean("File")
+    public Executor request() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2); //기본적으로 대기 중인 Thread 수(기본 스레드 수)
+        executor.setMaxPoolSize(5); //동시에 동작하는 최대 Thread 수
+        //setCorePoolSize 초과 요청에서 Thread 생성 요청 시,
+        //해당 요청을 Queue에 저장하는데 이때 수용가능한 Queue의 수
+        // Queue에 저장했다가 Thread에 자리가 생기면 하나씩 빼감
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("requset"); // 생성되는 Thread 접두사
+//        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+//        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+//        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
+//        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+        //이거 안쓰면 사용못함 tomcat의 servlet에서 init으로 처음서버실행할 때 초기설정? 해주는거처럼 생각해라
+        executor.initialize();
+        return executor;
+    }
 }

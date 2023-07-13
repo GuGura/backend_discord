@@ -34,7 +34,7 @@ public class FriendController {
         return SuccessResponse.toResponseEntity(SuccessType.SUCCESS_SEND_FRIEND_REQUEST);
     }
 
-    @GetMapping("/friend/requestUser")
+    @PostMapping("/friend/requestUser")
     public ResponseEntity<?> requestUserList(HttpServletRequest request){
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<UserDTO> list = friendService.findRequestUsers(userUID);

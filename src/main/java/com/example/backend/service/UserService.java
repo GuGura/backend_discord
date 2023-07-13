@@ -11,6 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,11 +42,29 @@ public class UserService {
             userMapper.saveResource(user.getId(), userDTO.getNickname());
         });
     }
+    public Map<String,String> updateUserResource(Map<String, String> params, int userUID)throws IOException {
+        if (!params.get("icon_url").equals("")){
+            String base64 = params.get("icon_url").substring(params.get("icon_url").lastIndexOf(",") + 1);
+            String fileName = base64.substring(30, 50) + ".png";
+            BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
+            String folderPath = ConvenienceUtil.makeOrGetLobbyFolderURL(userUID);
+            Path imgPath = Paths.get(folderPath, fileName);
+            ImageIO.write(image, "png", imgPath.toFile());
+            params.put("icon_url",imgPath.toString());
+        }userMapper.updateUserResource(params,userUID);
+        Map<String,String> list =  userMapper.findUserResourceByUserUIDM(userUID);
+        if (!list.get("icon_url").equals("")){
+            String imgURL = list.get("icon_url").substring(ConvenienceUtil.getImgPath().length());
+            imgURL = imgURL.replace("\\","/");
+            list.put("icon_url",imgURL);
+        }
+        return list;
+    }
 
     public UserDTO getUserBasicInfo(int userUID) {
         System.out.println(userUID);
         UserDTO userDTO = userMapper.findUserBasicInfoByUserUID(userUID).orElseThrow(() -> new CustomException(ErrorType.USER_NOT_FOUND));
-        if (userDTO.getIcon_url() != null){
+        if (!userDTO.getIcon_url().equals("")){
             String imgURL = userDTO.getIcon_url().substring(ConvenienceUtil.getImgPath().length());
             imgURL = imgURL.replace("\\","/");
             userDTO.setIcon_url(imgURL);

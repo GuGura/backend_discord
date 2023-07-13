@@ -6,6 +6,7 @@ import com.example.backend.mapper.ChannelMapper;
 import com.example.backend.model.MyChannelsDTO;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -67,6 +68,7 @@ public class ChannelService {
         return list;
     }
 
+
     public MyChannelsDTO createChannel(int userUID, String fileURL, String channelName) throws IOException {
         channelMapper.saveChannel(channelName, userUID);
         int channel_UID = channelMapper.findChannelUIDByUserUID(channelName, userUID);
@@ -74,10 +76,9 @@ public class ChannelService {
         if (!fileURL.equals("/img/sidebar/choose.png")) {
             String base64 = fileURL.substring(fileURL.lastIndexOf(",") + 1);
             String fileName = base64.substring(30, 50) + ".png";
-            BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
             String folderPath = ConvenienceUtil.makeOrGetChannelFolderURL(channel_UID);
             Path imgPath = Paths.get(folderPath, fileName);
-            ImageIO.write(image, "png", imgPath.toFile());
+            test(base64,imgPath);
             fileURL = imgPath.toString();
             channelMapper.updateChannelIcon(fileURL, channel_UID);
         }
@@ -90,6 +91,11 @@ public class ChannelService {
             }
         });
         return myChannelsDTO;
+    }
+    @Async("File")
+    public void test(String base64,Path imgPath) throws IOException{
+        BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
+        ImageIO.write(image, "png", imgPath.toFile());
     }
 
 //

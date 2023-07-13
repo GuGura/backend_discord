@@ -32,7 +32,7 @@ public class FriendService {
 
     private List<UserDTO> getUserDTOS(List<UserDTO> list) {
         list.forEach(user -> {
-            if (user.getIcon_url() != null) {
+            if (!user.getIcon_url().equals("")) {
                 String imgURL = user.getIcon_url().substring(ConvenienceUtil.getImgPath().length());
                 imgURL = imgURL.replace("\\", "/");
                 user.setIcon_url(imgURL);

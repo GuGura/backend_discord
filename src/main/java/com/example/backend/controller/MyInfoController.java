@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class MyInfoController {
 //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 //    }
 
-    @GetMapping("/myInfo/channelList")
+    @PostMapping("/myInfo/channelList")
     public ResponseEntity<?> getMyServerList(HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<MyChannelsDTO> list = channelService.getMyChannels(userUID);
@@ -59,11 +61,19 @@ public class MyInfoController {
 //                .build();
 //        return new ResponseEntity<>(resultDTO,HttpStatus.OK);
 //    }
-    @GetMapping("/myInfo/friendList")
+    @PostMapping("/myInfo/friendList")
     public ResponseEntity<?> getFriendList(HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<UserDTO> friendsList = friendService.myFriendList(userUID);
-        System.out.println("getFriendList:" + friendsList);
+        if (friendsList == null)
+            return SuccessResponse.toResponseEntity(SuccessType.SUCCESS_GET_BASIC_USERINFO);
         return SuccessResponse.toResponseEntity(friendsList, SuccessType.SUCCESS_GET_BASIC_USERINFO);
+    }
+
+    @PutMapping("/myInfo/updateProfile")
+    public ResponseEntity<?> updateProfile(@RequestBody Map<String,String> params, HttpServletRequest request) throws IOException {
+        int userUID = (int) request.getAttribute(ControllerProperties.userUID);
+        Map<String,String> list = userService.updateUserResource(params,userUID);
+        return SuccessResponse.toResponseEntity(list,SuccessType.SUCCESS_UPDATE_PROFILE);
     }
 }

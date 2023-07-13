@@ -24,6 +24,7 @@ public enum SuccessType {
     ATTEND_CHANNEL(HttpStatus.CREATED,"ATTEND CREATE"),
     SUCCESS_FIND_USER(HttpStatus.CREATED,"유저리스트 가져옴"),
     SUCCESS_SEND_FRIEND_REQUEST(HttpStatus.CREATED,"친구 신청 완료"),
+    SUCCESS_UPDATE_PROFILE(HttpStatus.CREATED,"프로필 정보 갱신 완료"),
     ;
 
     private final HttpStatus status;

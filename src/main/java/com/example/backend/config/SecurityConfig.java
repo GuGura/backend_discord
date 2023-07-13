@@ -41,7 +41,8 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().mvcMatchers(
                 "/ws/**",
-                "/ws"
+                "/ws",
+                "/channel/lobby"
         );
     }
 

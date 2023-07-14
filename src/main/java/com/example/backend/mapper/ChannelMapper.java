@@ -47,6 +47,12 @@ public interface ChannelMapper {
     @Select("SELECT * FROM channel_user WHERE user_uid = #{userUID} and channel_uid = #{channelUID}")
     Optional<ChannelMember> findChannelUserByUserUID(@Param("userUID") int userUID, @Param("channelUID") int channelUID);
 
+    @Update("UPDATE channel SET channel_invite_code = #{randomCode}, channel_invite_code_activate = true WHERE channel_uid = #{channelUID}")
+    void updateInViteCode(@Param("channelUID") int channelUID,@Param("randomCode") String randomCode);
+
+    @Select("SELECT channel_invite_code from channel where channel_uid = #{channelUID} and channel_invite_code_activate = true")
+    Optional<String> findInviteCodeByChannelUID(@Param("channelUID") int channelUID);
+
 //    @Delete("delete FROM channel_user WHERE CHANNEL_UID = #{channelUID} and MEMBER_UID = #{memberUID}")
 //    void deleteChannelMember(int channelUID, int memberUID);
 //

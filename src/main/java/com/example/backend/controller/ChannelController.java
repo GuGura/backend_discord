@@ -39,6 +39,12 @@ public class ChannelController {
         MyChannelsDTO myChannelDTO = channelService.getAttendChannel(inviteCode, userUID);
         return SuccessResponse.toResponseEntity(myChannelDTO,SuccessType.ATTEND_CHANNEL);
     }
+    @PostMapping("/channel/createInviteCode/{channel_UID}")
+    public ResponseEntity<?> createInviteCode(@PathVariable("channel_UID") int channel_UID){
+        System.out.println(channel_UID);
+        String inviteCode = channelService.createInviteCode(channel_UID);
+        return SuccessResponse.toResponseEntity(inviteCode,SuccessType.SUCCESS_CREATE_INVITE_CODE);
+    }
 //    @DeleteMapping("/channel/leaveChannel/{channelUID}")
 //    public ResponseEntity<?> leaveChannel(@PathVariable("channelUID") String channelUID,HttpServletRequest request){
 //        int channel_UID = Integer.parseInt(channelUID);

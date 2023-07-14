@@ -25,6 +25,7 @@ public enum ErrorType {
     /* 403 Forbidden : 클라이언트는 콘텐츠에 접근할 권리를 가지고 있지 않음*/
     IMG_CREATE_FAIL(HttpStatus.FORBIDDEN,"이미지 생성 실패"),
     IMG_ENCODER_FAIL(HttpStatus.FORBIDDEN,"Base64 Encoding 실패"),
+    IMG_GENERATE_INVITE_CODE_FAIL(HttpStatus.FORBIDDEN,"초대코드 생성 실패"),
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"유저를 찾을 수 없습니다."),
     USER_EMPTY(HttpStatus.NOT_FOUND,"입력칸이 비어 있습니다."),

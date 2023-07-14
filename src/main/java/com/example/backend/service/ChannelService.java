@@ -4,6 +4,7 @@ import com.example.backend.controller.exception.CustomException;
 import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.mapper.ChannelMapper;
 import com.example.backend.model.MyChannelsDTO;
+import com.example.backend.util.CodeGenerator;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -96,6 +97,12 @@ public class ChannelService {
     public void test(String base64,Path imgPath) throws IOException{
         BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
         ImageIO.write(image, "png", imgPath.toFile());
+    }
+
+    public String createInviteCode(int channelUID) {
+        String randomCode = CodeGenerator.createCode();
+        channelMapper.updateInViteCode(channelUID,randomCode);
+        return channelMapper.findInviteCodeByChannelUID(channelUID).orElseThrow(()-> new CustomException(ErrorType.IMG_GENERATE_INVITE_CODE_FAIL));
     }
 
 //

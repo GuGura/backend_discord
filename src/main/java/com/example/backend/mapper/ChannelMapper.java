@@ -5,6 +5,7 @@ import com.example.backend.model.entity.Channel;
 import com.example.backend.model.entity.ChannelMember;
 import com.example.backend.model.MyChannelsDTO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,14 +54,14 @@ public interface ChannelMapper {
     @Select("SELECT channel_invite_code from channel where channel_uid = #{channelUID} and channel_invite_code_activate = true")
     Optional<String> findInviteCodeByChannelUID(@Param("channelUID") int channelUID);
 
-//    @Delete("delete FROM channel_user WHERE CHANNEL_UID = #{channelUID} and MEMBER_UID = #{memberUID}")
-//    void deleteChannelMember(int channelUID, int memberUID);
-//
-//    @Select("SELECT * FROM channel_user WHERE CHANNEL_UID = #{channelUID}")
-//    Optional<ChannelMember> findChannelMemberByChannelUID(int channelUID);
-//
-//    @Delete("delete from channel WHERE CHANNEL_UID = #{channelUID}")
-//    void deleteChannel(int channelUID);
+    @Delete("delete FROM channel_user WHERE channel_uid = #{channelUID} and user_uid = #{userUID}")
+    void deleteChannelMember(@Param("channelUID") int channelUID,@Param("userUID") int userUID);
+
+    @Select("SELECT * FROM channel_user WHERE channel_uid = #{channelUID}")
+    Optional<ChannelMember> findChannelMemberByChannelUID(@Param("channelUID") int channelUID);
+
+    @Delete("delete from channel WHERE channel_uid = #{channelUID}")
+    void deleteChannel(@Param("channelUID") int channelUID);
 }
 //select m.CHANNEL_UID, m.MEMBER_UID, c.CHANNEL_TITLE, c.CHANNEL_ICON_URL
 //from channelmember m

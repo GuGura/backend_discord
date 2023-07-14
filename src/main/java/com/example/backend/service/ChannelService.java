@@ -104,12 +104,10 @@ public class ChannelService {
         channelMapper.updateInViteCode(channelUID,randomCode);
         return channelMapper.findInviteCodeByChannelUID(channelUID).orElseThrow(()-> new CustomException(ErrorType.IMG_GENERATE_INVITE_CODE_FAIL));
     }
-
-//
-//    public void leaveChannel(int channelUID, int memberUID) {
-//        channelMapper.deleteChannelMember(channelUID,memberUID);
-//        if(channelMapper.findChannelMemberByChannelUID(channelUID).isEmpty()){
-//            channelMapper.deleteChannel(channelUID);
-//        }
-//    }
+    public void leaveChannel(int channelUID, int userUID) {
+        channelMapper.deleteChannelMember(channelUID,userUID);
+        if(channelMapper.findChannelMemberByChannelUID(channelUID).isEmpty()){
+            channelMapper.deleteChannel(channelUID);
+        }
+    }
 }

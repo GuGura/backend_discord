@@ -45,11 +45,11 @@ public class ChannelController {
         String inviteCode = channelService.createInviteCode(channel_UID);
         return SuccessResponse.toResponseEntity(inviteCode,SuccessType.SUCCESS_CREATE_INVITE_CODE);
     }
-//    @DeleteMapping("/channel/leaveChannel/{channelUID}")
-//    public ResponseEntity<?> leaveChannel(@PathVariable("channelUID") String channelUID,HttpServletRequest request){
-//        int channel_UID = Integer.parseInt(channelUID);
-//        int memberUID =(int) request.getAttribute(ResultDtoProperties.USER_UID);
-//        channelService.leaveChannel(channel_UID,memberUID);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
+    @DeleteMapping("/channel/leaveChannel/{channelUID}")
+    public ResponseEntity<?> leaveChannel(@PathVariable("channelUID") String channelUID,HttpServletRequest request){
+        int channel_UID = Integer.parseInt(channelUID);
+        int userUID =(int) request.getAttribute(ControllerProperties.userUID);
+        channelService.leaveChannel(channel_UID,userUID);
+        return SuccessResponse.toResponseEntity(SuccessType.SUCCESS_DELETE_CHANNEL_MEMBER);
+    }
 }

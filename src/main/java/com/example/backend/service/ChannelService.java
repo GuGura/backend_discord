@@ -87,8 +87,9 @@ public class ChannelService {
         MyChannelsDTO myChannelsDTO = channelMapper.findLastChannelByUserUID(userUID);
         Collections.singletonList(myChannelsDTO).forEach(item -> {
             if (item.getChannel_icon_url() != null) {
-                String base64Img = ConvenienceUtil.base64EncoderToImg(item.getChannel_icon_url());
-                item.setChannel_icon_url(base64Img);
+                String imgURL = item.getChannel_icon_url().substring(ConvenienceUtil.getImgPath().length());
+                imgURL = imgURL.replace("\\","/");
+                item.setChannel_icon_url(imgURL);
             }
         });
         return myChannelsDTO;

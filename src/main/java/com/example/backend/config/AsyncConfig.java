@@ -38,8 +38,8 @@ public class AsyncConfig implements AsyncConfigurer {
     @Bean("File")
     public Executor request() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2); //기본적으로 대기 중인 Thread 수(기본 스레드 수)
-        executor.setMaxPoolSize(5); //동시에 동작하는 최대 Thread 수
+        executor.setCorePoolSize(4); //기본적으로 대기 중인 Thread 수(기본 스레드 수)
+        executor.setMaxPoolSize(100); //동시에 동작하는 최대 Thread 수
         //setCorePoolSize 초과 요청에서 Thread 생성 요청 시,
         //해당 요청을 Queue에 저장하는데 이때 수용가능한 Queue의 수
         // Queue에 저장했다가 Thread에 자리가 생기면 하나씩 빼감

@@ -8,6 +8,7 @@ import com.example.backend.model.entity.User;
 import com.example.backend.model.UserDTO;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +47,9 @@ public class UserService {
         if (!params.get("icon_url").equals("")){
             String base64 = params.get("icon_url").substring(params.get("icon_url").lastIndexOf(",") + 1);
             String fileName = base64.substring(30, 50) + ".png";
-            BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
             String folderPath = ConvenienceUtil.makeOrGetLobbyFolderURL(userUID);
             Path imgPath = Paths.get(folderPath, fileName);
-            ImageIO.write(image, "png", imgPath.toFile());
+            test(base64,imgPath);
             params.put("icon_url",imgPath.toString());
         }userMapper.updateUserResource(params,userUID);
         Map<String,String> list =  userMapper.findUserResourceByUserUIDM(userUID);
@@ -60,7 +60,11 @@ public class UserService {
         }
         return list;
     }
-
+    @Async("File")
+    public void test(String base64,Path imgPath) throws IOException{
+        BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
+        ImageIO.write(image, "png", imgPath.toFile());
+    }
     public UserDTO getUserBasicInfo(int userUID) {
         System.out.println(userUID);
         UserDTO userDTO = userMapper.findUserBasicInfoByUserUID(userUID).orElseThrow(() -> new CustomException(ErrorType.USER_NOT_FOUND));

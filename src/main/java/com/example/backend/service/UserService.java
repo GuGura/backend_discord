@@ -49,7 +49,7 @@ public class UserService {
             String fileName = base64.substring(30, 50) + ".png";
             String folderPath = ConvenienceUtil.makeOrGetLobbyFolderURL(userUID);
             Path imgPath = Paths.get(folderPath, fileName);
-            test(base64,imgPath);
+            createImg(base64,imgPath);
             params.put("icon_url",imgPath.toString());
         }userMapper.updateUserResource(params,userUID);
         Map<String,String> list =  userMapper.findUserResourceByUserUIDM(userUID);
@@ -61,7 +61,7 @@ public class UserService {
         return list;
     }
     @Async("File")
-    public void test(String base64,Path imgPath) throws IOException{
+    public void createImg(String base64,Path imgPath) throws IOException{
         BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
         ImageIO.write(image, "png", imgPath.toFile());
     }

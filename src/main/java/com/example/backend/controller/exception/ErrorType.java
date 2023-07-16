@@ -35,6 +35,7 @@ public enum ErrorType {
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT,"기존 유저가 존재합니다."),
     USER_ALREADY_FRIEND(HttpStatus.CONFLICT,"이미 친구리스트에 있는 유저입니다."),
+    ROOM_NOT_FOUND(HttpStatus.CONFLICT,"해당 방을 찾을 수 없습니다."),
     ;
     private final HttpStatus status;
     private final String message;

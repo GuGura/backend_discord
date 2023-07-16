@@ -28,6 +28,7 @@ public enum SuccessType {
     SUCCESS_CREATE_INVITE_CODE(HttpStatus.CREATED,"초대코드 생성 완료"),
     SUCCESS_DELETE_CHANNEL_MEMBER(HttpStatus.CREATED,"채널리스트 삭제 완료"),
     SUCCESS_CREATE_ROOM(HttpStatus.CREATED,"채널내의 ROOM 생성 완료"),
+    SUCCESS_GET_ROOMS(HttpStatus.CREATED,"채널내의 ROOM 리스트 가져옴"),
     ;
 
     private final HttpStatus status;

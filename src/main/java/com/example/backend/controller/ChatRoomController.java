@@ -35,6 +35,11 @@ public class ChatRoomController {
         chatRoomService.createChatRoom(chatRoom);
         return SuccessResponse.toResponseEntity(chatRoom, SuccessType.SUCCESS_CREATE_ROOM);
     }
+    @PostMapping("/chatRoom/{channelUID}")
+    public ResponseEntity<?> initChannelRooms(@PathVariable("channelUID") int channelUID){
+        Map<String,Object> list = chatRoomService.getChatRooms(channelUID);
+        return SuccessResponse.toResponseEntity(list,SuccessType.SUCCESS_GET_ROOMS);
+    }
 
 //    @GetMapping("/room")
 //    public String rooms(Model model) {

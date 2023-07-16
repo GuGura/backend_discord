@@ -18,10 +18,10 @@ public interface ChatRoomMapper {
     @Select("select * from chat_room where channel_uid = #{channelUID} and room_type = 'Voice'")
     Optional<ChatRoom> findVoiceRoom(@Param("channelUID") int channelUID);
 
-    @Select("select * from chat_room where channel_uid = #{channelUID} and room_type = 'Text'")
+    @Select("select * from chat_room where channel_uid = #{channelUID} and room_type = 'Text' order by id desc")
     List<ChatRoom> findTextRoomList(@Param("channelUID") int channelUID);
 
-    @Select("select * from chat_room where channel_uid = #{channelUID} and room_type = 'Voice'")
+    @Select("select * from chat_room where channel_uid = #{channelUID} and room_type = 'Voice' order by id desc")
     List<ChatRoom> findVoiceRoomList(@Param("channelUID") int channelUID);
 
     @Delete("Delete from chat_room where channel_uid = #{channelUID}")

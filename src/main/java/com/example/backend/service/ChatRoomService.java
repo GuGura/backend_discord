@@ -15,7 +15,7 @@ import java.util.Map;
 public class ChatRoomService {
     private final ChatRoomMapper chatRoomMapper;
     public void createChatRoom(ChatRoom chatRoom) {
-
+        chatRoomMapper.save(chatRoom);
     }
 
     public Map<String,Object> getChatRooms(int channelUID){

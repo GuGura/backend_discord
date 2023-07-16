@@ -6,9 +6,9 @@ version: /api/v2
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    username: discord
+    username: root
     password: 1234
-    url: jdbc:mariadb://localhost:3307/discord
+    url: jdbc:mariadb://localhost:3306/discord
 
   mail:
     # mail default settings

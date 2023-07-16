@@ -29,6 +29,7 @@ public class CorsConfig implements WebMvcConfigurer {
         config.addExposedHeader(JwtProperties.HEADER_ACCESS);
         config.addExposedHeader(JwtProperties.HEADER_REFRESH);
         source.registerCorsConfiguration("/**",config);
+        source.registerCorsConfiguration("/ws/**",config);
         return new CorsFilter(source);
     }
 }

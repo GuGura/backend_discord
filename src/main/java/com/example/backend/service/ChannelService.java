@@ -46,8 +46,9 @@ public class ChannelService {
     public Map<String,Object> getAttendChannel(String inviteCode, int userUID) {
         channelMapper.findChannelByInviteCode(inviteCode).orElseThrow(() -> new CustomException(ErrorType.CHANNEL_NOT_FOUND));
         channelMapper.findChannelByInviteCode(inviteCode).ifPresent(channelDTO -> {
+            System.out.println("1");
             int channelUID = channelDTO.getChannel_uid();
-            boolean isMyChannel = channelMapper.findChannelUserByUserUID(channelUID, userUID).isPresent();
+            boolean isMyChannel = channelMapper.findChannelUserByUserUID(userUID,channelUID).isPresent();
             if (isMyChannel)
                 throw new CustomException(ErrorType.USER_ALREADY_EXISTS);
             else

@@ -60,7 +60,7 @@ public class FriendService {
             throw new CustomException(ErrorType.USER_ALREADY_FRIEND);
         friendMapper.updateFriend(userUID, friendUID);
         UserDTO userDTO = userMapper.findUserResourceByUserUID(friendUID);
-        if (userDTO.getIcon_url() != null) {
+        if (userDTO.getIcon_url() != null && !userDTO.getIcon_url().equals("")) {
             String imgURL = userDTO.getIcon_url().substring(ConvenienceUtil.getImgPath().length());
             imgURL = imgURL.replace("\\", "/");
             userDTO.setIcon_url(imgURL);

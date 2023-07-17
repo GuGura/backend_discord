@@ -2,8 +2,8 @@ package com.example.backend.security.filter.jwt;
 
 public interface JwtProperties {
 
-    int ACCESS_TOKEN_EXPIRATION_TIME = 10000000 * 10;
-    int REFRESH_TOKEN_EXPIRATION_TIME = 100000000 * 5;
+    int ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 12;
+    int REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
     //60000*10;
     String TOKEN_PREFIX = "Bearer ";
     String HEADER_ACCESS = "accessJwt";

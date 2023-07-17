@@ -1,0 +1,80 @@
+create table authentication_code
+(
+    email     varchar(100) null,
+    auth_code varchar(10)  null
+);
+create table channel
+(
+    channel_uid                  int auto_increment
+        primary key,
+    channel_title                varchar(100)                   null,
+    channel_icon_url             varchar(500)                   null,
+    channel_description          varchar(100)                   null,
+    channel_owner                int                            null,
+    channel_invite_code          varchar(100)                   null,
+    channel_invite_code_activate tinyint(1)   default 0         not null,
+    channel_is_open              tinyint(1)   default 0         not null,
+    channel_create_date          timestamp    default sysdate() not null,
+    channel_type                 varchar(100) default 'NORMAL'  not null
+);
+create table channel_user
+(
+    channel_uid            int                         null,
+    user_uid               int                         null,
+    channel_user_authority varchar(100)                null,
+    channel_user_join_date timestamp default sysdate() not null
+);
+
+create table friend
+(
+    friend_sender   int                          null,
+    friend_receiver int                          null,
+    friend_checked  tinyint(1) default 0         not null,
+    friend_date     timestamp  default sysdate() not null
+);
+create table jwt
+(
+    id                     int auto_increment
+        primary key,
+    username               varchar(100)               null,
+    accessJwt              varchar(1000)              null,
+    refreshJwt             varchar(500)               null,
+    create_date            datetime default sysdate() not null,
+    accessJwtExpires_date  datetime default sysdate() not null,
+    refreshJwtExpires_date datetime default sysdate() not null
+);
+create table user
+(
+    id        int auto_increment
+        primary key,
+    username  varchar(100)                   null comment 'email',
+    password  varchar(500)                   null,
+    role      varchar(100) default 'USER'    not null,
+    join_date timestamp    default sysdate() not null
+);
+
+
+create table user_resource
+(
+    user_id     int                           not null
+        primary key,
+    nickname    varchar(100)                  null,
+    icon_url    varchar(500)  default ''      not null,
+    description varchar(1000) default '환영합니다' null
+);
+
+create table post
+(
+	id int auto_increment primary key,
+	post_owner_id int,
+	post_title varchar(500),
+	post_content longtext,
+	upload_date default sysdate() not null,
+	visible tinyint default true,
+	post_img_url varchar(500),
+	is_img_in tinyint,
+	original_writer int,
+	is_post_scrapped tinyint,
+	scrapping_id int
+);
+

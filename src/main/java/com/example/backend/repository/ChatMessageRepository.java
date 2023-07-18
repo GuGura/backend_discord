@@ -29,16 +29,25 @@ public class ChatMessageRepository {
         opsHashChatMessage.put(CHAT_MESSAGES, generateKey(message), message);
     }
 
+    public void deleteChatMessages() {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(CHAT_MESSAGES))) {
+            redisTemplate.delete(CHAT_MESSAGES);
+        }
+    }
+
     // ChatMessage를 구분하기 위한 고유 키 생성
     private String generateKey(ChatMessage message) {
         // 고유 키 생성 로직을 구현해야 함
-        // 예시로 roomId와 sender를 조합하여 고유 키 생성
-        return message.getRoomId() + "_" + message.getSender() + "_" + message.getSendDate();
+        // RoomId_UserName_Sender_SendDate
+        // 방번호 _보낸 사람 이메일_ 보낸 사람 닉네임_ 보낸 날짜
+        return message.getRoomId() + "_" + message.getUserName() + "_" + message.getSender() + "_" + message.getSendDate();
     }
 
+    // 레디스에 저장된 모든 채팅 메세지 추출
     public List<ChatMessage> getAllChatMessage() {
         return opsHashChatMessage.values(CHAT_MESSAGES);
     }
+
 
     public List<ChatMessage> getChatMessagesByRoomId(String roomId) {
         List<ChatMessage> chatMessages = new ArrayList<>();

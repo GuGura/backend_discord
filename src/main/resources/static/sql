@@ -75,4 +75,14 @@ create table user_resource
     description varchar(1000) default '환영합니다' null
 );
 
+CREATE TABLE chat_message (
+    message_uid INT AUTO_INCREMENT,
+    room_uid VARCHAR(255),
+    username VARCHAR(255),
+    sender VARCHAR(255),
+    message TEXT,
+    send_date DATETIME,
+    PRIMARY KEY (message_uid)
+);
+
 

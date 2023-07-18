@@ -15,9 +15,10 @@ public class ChatMessage implements Serializable {
     }
 
     @Builder
-    public ChatMessage(MessageType type, String roomId, String sender, String message) {
+    public ChatMessage(MessageType type, String roomId,String userName, String sender, String message) {
         this.type = type;
         this.roomId = roomId;
+        this.userName = userName;
         this.sender = sender;
         this.message = message;
         this.sendDate = new Date();
@@ -30,7 +31,8 @@ public class ChatMessage implements Serializable {
 
     private MessageType type; // 메시지 타입
     private String roomId; // 방번호
-    private String sender; // 메시지 보낸사람
+    private String userName; // 메세지 보낸 사람 (email)
+    private String sender; // 메시지 보낸 사람 (nickName)
     private String message; // 메시지
     private Date sendDate; // 받은 시각
 }

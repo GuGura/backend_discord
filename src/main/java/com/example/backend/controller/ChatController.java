@@ -8,14 +8,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@RequestMapping(ControllerProperties.API_VERSION)
 public class ChatController {
     private final ChatService chatService;
 
@@ -25,10 +24,9 @@ public class ChatController {
         chatService.publishMessage(message);
     }
 
-//    @GetMapping("/enter/{roomId}")
-//    @ResponseBody
-//    public List<ChatMessage> getChatMessages(@PathVariable String roomId) {
-//        return chatService.getChatMessagesFromDB(roomId);
-//    }
+    @GetMapping("/chat/message/list/{roomId}")
+    public List<ChatMessage> getChatMessages(@PathVariable String roomId) {
+        return chatService.getChatMessagesFromMariaDB(roomId);
+    }
 }
 

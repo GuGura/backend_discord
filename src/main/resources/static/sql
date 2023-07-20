@@ -85,4 +85,14 @@ CREATE TABLE chat_message (
     PRIMARY KEY (message_uid)
 );
 
+create table user_state(
+    id int auto_increment
+    primary key,
+    username varchar(255) null,
+    state varchar(255) null,
+    connect_date timestamp    null,
+    constraint `UNIQUE KEY`
+    unique (state, connect_date, username)
+);
+
 

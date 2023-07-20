@@ -3,8 +3,8 @@ package com.example.backend.mapper;
 import com.example.backend.model.entity.User;
 import com.example.backend.model.UserDTO;
 import org.apache.ibatis.annotations.*;
-import org.springframework.security.core.parameters.P;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,4 +38,31 @@ public interface UserMapper {
 
     @Select("SELECT nickname,icon_url,description FROM user_resource WHERE user_id = #{userUID}")
     Map<String,String> findUserResourceByUserUIDM(@Param("userUID") int userUID);
+
+    @Insert("INSERT INTO user_state (username, state, connect_date) VALUES (#{username}, #{state}, #{connect_date}) ON DUPLICATE KEY UPDATE state = #{state}, connect_date = #{connect_date}")
+    void insertUserState(User user);
+
+    @Select("SELECT u.username, ur.nickname, us.state, us.connect_date, cu.channel_uid " +
+            "FROM user u " +
+            "JOIN user_resource ur ON u.id = ur.user_id " +
+            "JOIN channel_user cu ON u.id = cu.user_uid " +
+            "JOIN user_state us ON u.username = us.username " +
+            "WHERE us.connect_date = ( " +
+            "SELECT MAX(connect_date) " +
+            "FROM user_state " +
+            "WHERE username = u.username)")
+    List<User> onlineUser();
+
+    @Select("SELECT u.username, ur.nickname, us.state, us.connect_date, cu.channel_uid " +
+            "FROM user u " +
+            "JOIN user_resource ur ON u.id = ur.user_id " +
+            "JOIN channel_user cu ON u.id = cu.user_uid " +
+            "JOIN user_state us ON u.username = us.username " +
+            "WHERE us.connect_date = ( " +
+            "SELECT MAX(connect_date) " +
+            "FROM user_state " +
+            "WHERE username = u.username) " +
+            "AND u.username = #{username}")
+    List<User> sendToOnlineUser(String username);
+
 }

@@ -20,30 +20,53 @@ public class RedisConfig {
      * 단일 Topic 사용을 위한 Bean 설정
      */
     @Bean
-    public ChannelTopic channelTopic() {
+    public ChannelTopic chatChannelTopic() {
         return new ChannelTopic("chatroom");
     }
+
+    @Bean
+    public ChannelTopic alarmChannelTopic() {
+        return new ChannelTopic("alarm");
+    }
+
 
     /**
      * redis pub/sub 메시지를 처리하는 listener 설정
      */
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory,
-                                                              MessageListenerAdapter listenerAdapter,
-                                                              ChannelTopic channelTopic) {
+    public RedisMessageListenerContainer chatMessageListener(RedisConnectionFactory connectionFactory,
+                                                             MessageListenerAdapter listenerAdapterForMessage,
+                                                             ChannelTopic chatChannelTopic) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, channelTopic);
+        container.addMessageListener(listenerAdapterForMessage, chatChannelTopic);
         return container;
     }
+
+    @Bean
+    public RedisMessageListenerContainer alarmMessageListener(RedisConnectionFactory connectionFactory,
+                                                              MessageListenerAdapter listenerAdapterForAlarm,
+                                                              ChannelTopic alarmChannelTopic) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapterForAlarm, alarmChannelTopic);
+        return container;
+    }
+
 
     /**
      * 실제 메시지를 처리하는 subscriber 설정 추가
      */
     @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriberService subscriber) {
+    public MessageListenerAdapter listenerAdapterForMessage(RedisSubscriberService subscriber) {
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
+
+    @Bean
+    public MessageListenerAdapter listenerAdapterForAlarm(RedisSubscriberService subscriber) {
+        return new MessageListenerAdapter(subscriber, "sendAlarm");
+    }
+
 
     /**
      * 어플리케이션에서 사용할 redisTemplate 설정

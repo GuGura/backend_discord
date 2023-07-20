@@ -63,7 +63,3 @@ public interface ChannelMapper {
     @Delete("delete from channel WHERE channel_uid = #{channelUID}")
     void deleteChannel(@Param("channelUID") int channelUID);
 }
-//select m.CHANNEL_UID, m.MEMBER_UID, c.CHANNEL_TITLE, c.CHANNEL_ICON_URL
-//from channelmember m
-//left join channel c on m.CHANNEL_UID = c.CHANNEL_UID
-//where m.MEMBER_UID = 3

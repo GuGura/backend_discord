@@ -4,8 +4,10 @@ import com.example.backend.controller.exception.CustomException;
 import com.example.backend.controller.exception.ErrorType;
 import com.example.backend.mapper.ChannelMapper;
 import com.example.backend.mapper.ChatRoomMapper;
+import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.MyChannelsDTO;
 import com.example.backend.model.entity.ChatRoom;
+import com.example.backend.model.entity.User;
 import com.example.backend.util.CodeGenerator;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class ChannelService {
 
     private final ChannelMapper channelMapper;
     private final ChatRoomMapper chatRoomMapper;
+    private final UserMapper userMapper;
 
     public List<MyChannelsDTO> getMyChannels(int userUID) {
         List<MyChannelsDTO> list = new ArrayList<MyChannelsDTO>(channelMapper.findChannelsByUserUID(userUID));
@@ -131,5 +134,9 @@ public class ChannelService {
                 .channel_icon_url(channel_iconURL)
                 .channel_type(channel_type)
                 .build();
+    }
+
+    public List<User> getUserResources() {
+        return userMapper.onlineUser();
     }
 }

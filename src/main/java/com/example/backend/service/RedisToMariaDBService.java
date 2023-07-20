@@ -16,7 +16,7 @@ public class RedisToMariaDBService {
     private final ChatMessageRepository chatMessageRepository;
     private final RedisToMariaDBMapper redisToMariaDBMapper;
 
-    @Scheduled(fixedDelay = 1000000)
+    @Scheduled(fixedDelay = 100000)
     private void saveChatList() {
         List<ChatMessage> chatMessages = chatMessageRepository.getAllChatMessage();
         for (ChatMessage chatMessage : chatMessages) {

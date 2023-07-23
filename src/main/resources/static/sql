@@ -95,4 +95,21 @@ create table user_state(
     unique (state, connect_date, username)
 );
 
+create table post
+(
+	id int auto_increment primary key,
+	post_owner_id int,
+	post_title varchar(500),
+	post_content longtext,
+	upload_date default sysdate() not null,
+	visible tinyint default true,
+	post_img_url varchar(500),
+	is_img_in tinyint,
+	original_writer int,
+	is_post_scrapped tinyint,
+	scrapping_id int
+);
+
+
+
 

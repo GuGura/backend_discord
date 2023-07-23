@@ -99,7 +99,6 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> listMonthlyNext(@RequestBody String date, HttpServletRequest request){
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         String year = date.substring(14,16);
-        System.out.println(Integer.parseInt(year)+1);
         List<EventDTO> events= eventService.listMonthly(Integer.parseInt(year)+1, userUID);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }

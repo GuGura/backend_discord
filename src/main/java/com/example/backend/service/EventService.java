@@ -16,8 +16,7 @@ public class EventService {
 
 
     public List<EventDTO> listMonthly(int year, int memberId) {
-        System.out.println(memberId);
-        System.out.println(eventMapper.listMonthly(year, memberId));
+
         return eventMapper.listMonthly(year, memberId);
     }
 

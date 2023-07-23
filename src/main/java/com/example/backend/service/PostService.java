@@ -1,6 +1,8 @@
 package com.example.backend.service;
 
 import com.example.backend.mapper.PostMapper;
+import com.example.backend.mapper.UserMapper;
+import com.example.backend.model.entity.Post;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -11,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,6 +21,7 @@ import java.util.Map;
 public class PostService {
 
     private final PostMapper postMapper;
+    private final UserMapper userMapper;
 
     public void saveNewPost(Map<String, String> params, int userUID)throws IOException {
         boolean is_img_in;
@@ -42,4 +46,37 @@ public class PostService {
         BufferedImage image = ConvenienceUtil.base64DecoderToImg(base64);
         ImageIO.write(image, "png", imgPath.toFile());
     }
+
+    public List<Post> listTenById(int pageNum,int userUID) {
+        List<Post> posts = postMapper.listTenById(pageNum, userUID);
+        for (Post post : posts) {
+            if (!post.is_post_scrapped()&&userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).isPresent()) {
+                post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+                if (!userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url().equals("")) {
+                    post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url());
+                    String imgURL = userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\", "/");
+                    post.setUserIcon(imgURL);
+                }
+            } else if(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).isPresent()){
+                post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getNickname());
+                if (!userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().equals("")) {
+                    post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url());
+                    String imgURL = userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\", "/");
+                    post.setUserIcon(imgURL);
+                }
+                post.setPost_owner_name(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+            }
+            if (!post.getPost_img_url().equals("none")) {
+                String imgURL = post.getPost_img_url().substring(ConvenienceUtil.getImgPath().length());
+                imgURL = imgURL.replace("\\", "/");
+                post.setPost_img_url(imgURL);
+            }
+
+        }
+        return posts;
+    }
+
+
 }

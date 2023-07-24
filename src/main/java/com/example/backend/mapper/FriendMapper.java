@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface FriendMapper {
 
-    @Select("SELECT ur.nickname, ur.icon_url " +
+    @Select("SELECT ur.nickname, ur.icon_url, ur.user_id " +
             "FROM friend f1 \n" +
             "         JOIN user_resource ur ON f1.friend_receiver = ur.user_id \n" +
             "WHERE f1.friend_sender = #{userUID} \n" +

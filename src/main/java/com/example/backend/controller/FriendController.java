@@ -20,6 +20,11 @@ public class FriendController {
 
     private final FriendService friendService;
 
+    @PostMapping("/friend/{id}")
+    public int friendTest(@PathVariable("id") int id){
+        return id;
+    }
+
     @PostMapping("/friend/search/{nickname}")
     public ResponseEntity<?> getSearchList(@PathVariable("nickname") String nickname, HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);

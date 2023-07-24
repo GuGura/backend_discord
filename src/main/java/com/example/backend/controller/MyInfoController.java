@@ -49,18 +49,12 @@ public class MyInfoController {
         return SuccessResponse.toResponseEntity(userDTO, SuccessType.SUCCESS_GET_BASIC_USERINFO);
     }
 
-    //
-//    @PostMapping("/myInfo/friend")
-//    public  ResponseEntity<?> getFriendInfo(@RequestBody Map<String,String> params, HttpServletRequest request){
-//        Member member = userService.getLobbyInfoByMemberUID(Integer.parseInt(params.get("friendId")));
-//        ResultMember memberToReturn = UserUtil.memberToReturn(member);
-//        memberToReturn.setId(Integer.parseInt(params.get("friendId")));
-//        resultDTO = ResultDTO.builder()
-//                .result(memberToReturn)
-//                .message("lobby Info callback")
-//                .build();
-//        return new ResponseEntity<>(resultDTO,HttpStatus.OK);
-//    }
+    @PostMapping("/myInfo/friend")
+    public UserDTO getFriendInfo(@RequestBody Map<String,String> params, HttpServletRequest request){
+        UserDTO user = userService.getUserBasicInfo(Integer.parseInt(params.get("friendId")));
+        user.setId(Integer.parseInt(params.get("friendId")));
+        return user;
+    }
     @PostMapping("/myInfo/friendList")
     public ResponseEntity<?> getFriendList(HttpServletRequest request) {
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);

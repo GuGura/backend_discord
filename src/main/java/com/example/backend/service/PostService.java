@@ -81,6 +81,41 @@ public class PostService {
         return posts;
     }
 
+    public List<Post> listTenByIdFriend(int pageNum, int id, int userUID) {
+        List<Post> posts = postMapper.listTenById(pageNum, id);
+        for (Post post : posts) {
+            if (!post.is_post_scrapped()&&userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).isPresent()) {
+                post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+                if (!userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url().equals("")) {
+                    post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url());
+                    String imgURL = userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\", "/");
+                    post.setUserIcon(imgURL);
+                }
+            } else if(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).isPresent()){
+                post.setIs_post_scrapped_int(1);
+                post.setPost_owner_name(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+                post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getNickname());
+                if (!userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().equals("")) {
+                    post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url());
+                    String imgURL = userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\", "/");
+                    post.setUserIcon(imgURL);
+                }
+                post.setPost_owner_name(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+            }
+            if (!post.getPost_img_url().equals("none")) {
+                String imgURL = post.getPost_img_url().substring(ConvenienceUtil.getImgPath().length());
+                imgURL = imgURL.replace("\\", "/");
+                post.setPost_img_url(imgURL);
+            }
+            if(post.getOriginal_writer() == userUID){
+                post.setIs_post_mine(1);
+            }
+        }
+        return posts;
+    }
+
 
     public void deleteMyPost(int id, int userUID, int scrapping_id) {
         postMapper.deleteMyPost(id,userUID,scrapping_id);

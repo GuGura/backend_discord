@@ -27,10 +27,6 @@ public class EventController {
 
     }
 
-    @GetMapping("/friend/{id}")
-    public int friendTest(@PathVariable("id") int id){
-        return id;
-    }
 
     @PostMapping("/event/saveFriendEvent")
     public int saveFriend(@RequestBody EventDTO eventOrigin, HttpServletRequest request) throws Exception {

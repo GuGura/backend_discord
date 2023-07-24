@@ -39,6 +39,17 @@ public class PostController {
         return postService.listTenById(pageNum,userUID);
     }
 
+    @PostMapping("/post/listByPageFriend")
+    public List<Post> listTenByIDFriend(@RequestBody Map<String,String> params, HttpServletRequest request){
+        int userUID = (int) request.getAttribute(ControllerProperties.userUID);
+        int friendId=Integer.parseInt(params.get("id"));
+        int pageNum=Integer.parseInt(params.get("lastPosting"));
+        if(pageNum==0){
+            pageNum = 100000;
+        }
+        return postService.listTenByIdFriend(pageNum,friendId,userUID);
+    }
+
     @PostMapping("/post/deletePost")
     public void deletePost(@RequestBody Map<String,String> params, HttpServletRequest request){
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);

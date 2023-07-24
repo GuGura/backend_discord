@@ -59,6 +59,53 @@ public class PostService {
                     post.setUserIcon(imgURL);
                 }
             } else if(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).isPresent()){
+                post.setIs_post_scrapped_int(1);
+                post.setPost_owner_name(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+                post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getNickname());
+                if (!userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().equals("")) {
+                    post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url());
+                    String imgURL = userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\", "/");
+                    post.setUserIcon(imgURL);
+                }
+                post.setPost_owner_name(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+            }
+            if (!post.getPost_img_url().equals("none")) {
+                String imgURL = post.getPost_img_url().substring(ConvenienceUtil.getImgPath().length());
+                imgURL = imgURL.replace("\\", "/");
+                post.setPost_img_url(imgURL);
+            }
+            post.setIs_post_mine(1);
+
+        }
+        return posts;
+    }
+
+
+    public void deleteMyPost(int id, int userUID, int scrapping_id) {
+        postMapper.deleteMyPost(id,userUID,scrapping_id);
+    }
+
+    public List<Post> listTenByIdWithFriend(int pageNum, int userUID){
+        List<Post> posts = postMapper.listTenByIdWithFriend(pageNum, userUID);
+        for (Post post : posts) {
+            if (!post.is_post_scrapped()&&userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).isPresent()) {
+                if(post.getPost_owner_id() == userUID){
+                    post.setIs_post_mine(1);
+                }
+                post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
+                if (!userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url().equals("")) {
+                    post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url());
+                    String imgURL = userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getIcon_url().substring(ConvenienceUtil.getImgPath().length());
+                    imgURL = imgURL.replace("\\", "/");
+                    post.setUserIcon(imgURL);
+                }
+            } else if(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).isPresent()){
+                if(post.getOriginal_writer() == userUID || post.getPost_owner_id() == userUID){
+                    post.setIs_post_mine(1);
+                }
+                post.setIs_post_scrapped_int(1);
+                post.setPost_owner_name(userMapper.findUserBasicInfoByUserUID(post.getPost_owner_id()).get().getNickname());
                 post.setUserName(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getNickname());
                 if (!userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url().equals("")) {
                     post.setUserIcon(userMapper.findUserBasicInfoByUserUID(post.getOriginal_writer()).get().getIcon_url());
@@ -74,9 +121,24 @@ public class PostService {
                 post.setPost_img_url(imgURL);
             }
 
+
         }
         return posts;
     }
 
+    public void scrappingPost(int id, int userUID) {
+        Post originalPost = postMapper.selectPostByID(id);
+        int post_owner_id = originalPost.getPost_owner_id();
+        String post_title = originalPost.getPost_title();
+        String post_content = originalPost.getPost_content();
+        String upload_date = originalPost.getUpload_date();
+        String post_img_url = originalPost.getPost_img_url();
+        boolean is_img_in = originalPost.is_img_in();
+        int original_writer = post_owner_id;
+        boolean is_post_scrapped = true;
+        int scrapping_id = originalPost.getId();
+        post_owner_id = userUID;
+        postMapper.saveScrappingPost(post_owner_id,post_title,post_content,upload_date,post_img_url,is_img_in,original_writer,is_post_scrapped,scrapping_id);
 
+    }
 }

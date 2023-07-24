@@ -23,8 +23,8 @@ public class Post {
     private String userName;
     private String userIcon;
     private String post_owner_name;
-
-
+    private int is_post_mine;
+    private int is_post_scrapped_int;
 
 
 }

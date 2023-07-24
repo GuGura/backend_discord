@@ -65,4 +65,5 @@ public interface UserMapper {
             "AND u.username = #{username}")
     List<User> sendToOnlineUser(String username);
 
+
 }

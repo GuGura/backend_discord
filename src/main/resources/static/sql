@@ -110,6 +110,17 @@ create table post
 	scrapping_id int
 );
 
+create table event
+(
+    id        int NOT NULL AUTO_INCREMENT PRIMARY key,
+    estart    date,
+    end       date,
+    title     varchar(500),
+    memberId  int,
+    groupName varchar(100),
+    allday    BOOLEAN,
+    groupId int
+);
 
 
 

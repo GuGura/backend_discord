@@ -14,7 +14,7 @@ public interface EventMapper {
     void saveEvent(EventDTO event);
 
     @Select("SELECT last_insert_id();")
-    int selectLast();
+    int selectLastInserted();
 
     @Select("SELECT id, estart, end, title, memberId, groupName, groupId from event where id = #{id}")
     @Results({
@@ -25,7 +25,7 @@ public interface EventMapper {
             @Result(column = "memberId", property = "memberId"),
             @Result(column = "groupId", property = "groupId")
     })
-    EventDTO viewEventById(@Param("id") int id);
+    EventDTO selectEventById(@Param("id") int id);
 
     @Select("SELECT id, estart, end, title, memberId, groupName from event WHERE (month(estart) = #{year} OR month(end) = #{year}) and memberId=#{memberId}")
     @Results({
@@ -36,7 +36,7 @@ public interface EventMapper {
             @Result(column = "memberId", property = "memberId"),
             @Result(column = "groupId", property = "groupId")
     })
-    List<EventDTO> listMonthly(@Param("year") int year, @Param("memberId") int memberId);
+    List<EventDTO> eventsByMonth(@Param("year") int year, @Param("memberId") int memberId);
 
 
     @Select("SELECT * from EVENT WHERE (TO_CHAR(estart,'yyyy-mm-dd') = #{date} || TO_CHAR(DATE_SUB(end, INTERVAL 1 day),'yyyy-mm-dd') =  #{date}) and memberId=#{memberId}")
@@ -49,7 +49,7 @@ public interface EventMapper {
             @Result(column = "groupName", property = "groupName"),
             @Result(column = "groupId", property = "groupId")
     })
-    List<EventDTO> listDaily(@Param("date") String date, @Param("memberId") int memberId);
+    List<EventDTO> eventsByDate(@Param("date") String date, @Param("memberId") int memberId);
 
     @Delete("delete from event where (id = #{id} or groupId = #{id}) and memberId = #{memberId}")
     void deleteEvent(@Param("id") int id, @Param("memberId") int memberId);

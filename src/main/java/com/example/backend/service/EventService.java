@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 
 import com.example.backend.mapper.EventMapper;
+import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.EventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,27 +14,28 @@ import java.util.List;
 public class EventService {
 
     private final EventMapper eventMapper;
+    private final UserMapper userMapper;
 
 
-    public List<EventDTO> listMonthly(int year, int memberId) {
-
-        return eventMapper.listMonthly(year, memberId);
+    public List<EventDTO> eventsByMonth(int year, int memberId) {
+        return eventMapper.eventsByMonth(year, memberId);
     }
 
-    public int saveEvent(EventDTO event) {
+    public int saveEvent(EventDTO event,int userUID) {
         eventMapper.saveEvent(event);
-        return eventMapper.selectLast();
+        event.setGroupName(userMapper.findUserBasicInfoByUserUID(userUID).get().getNickname());
+        return eventMapper.selectLastInserted();
     }
 
-    public EventDTO viewEventById(int id){
-        return eventMapper.viewEventById(id);
+    public EventDTO selectEventById(int id){
+        return eventMapper.selectEventById(id);
     }
 
     public void deleteEvent(int id, int memberId) {
         eventMapper.deleteEvent(id,memberId);
     }
 
-    public List<EventDTO> listDaily(int year,int month, int date, int memberId) {
+    public List<EventDTO> eventsByDate(int year,int month, int date, int memberId) {
         String sMonth = "";
         if(month<10){
             sMonth = "0"+Integer.toString(month);
@@ -47,6 +49,6 @@ public class EventService {
             sDate = Integer.toString(date);
         }
         String fullDate = Integer.toString(year)+"-"+sMonth+"-"+sDate;
-        return eventMapper.listDaily(fullDate,memberId);
+        return eventMapper.eventsByDate(fullDate,memberId);
     }
 }

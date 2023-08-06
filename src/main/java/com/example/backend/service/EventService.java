@@ -22,8 +22,9 @@ public class EventService {
     }
 
     public int saveEvent(EventDTO event,int userUID) {
-        eventMapper.saveEvent(event);
         event.setGroupName(userMapper.findUserBasicInfoByUserUID(userUID).get().getNickname());
+        eventMapper.saveEvent(event);
+
         return eventMapper.selectLastInserted();
     }
 

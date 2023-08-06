@@ -77,6 +77,7 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> listByDate(@RequestBody Map<String,String> params, HttpServletRequest request){
         int userUID = (int) request.getAttribute(ControllerProperties.userUID);
         List<EventDTO> events= eventService.eventsByDate(Integer.parseInt(params.get("year")),Integer.parseInt(params.get("month")), Integer.parseInt(params.get("date")), userUID);
+        System.out.println(events);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 

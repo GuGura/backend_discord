@@ -6,6 +6,7 @@ import com.example.backend.mapper.EmailMapper;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.entity.User;
 import com.example.backend.model.UserDTO;
+import com.example.backend.util.CodeGenerator;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -46,7 +47,7 @@ public class UserService {
     public Map<String,String> updateUserResource(Map<String, String> params, int userUID)throws IOException {
         if (!params.get("icon_url").equals("")){
             String base64 = params.get("icon_url").substring(params.get("icon_url").lastIndexOf(",") + 1);
-            String fileName = base64.substring(30, 50) + ".png";
+            String fileName = CodeGenerator.createCode();
             String folderPath = ConvenienceUtil.makeOrGetLobbyFolderURL(userUID);
             Path imgPath = Paths.get(folderPath, fileName);
             createImg(base64,imgPath);

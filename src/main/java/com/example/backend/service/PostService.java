@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.mapper.PostMapper;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.entity.Post;
+import com.example.backend.util.CodeGenerator;
 import com.example.backend.util.ConvenienceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -32,7 +33,7 @@ public class PostService {
         }
         if (!params.get("post_img_url").equals("none")) {
             String base64 = params.get("post_img_url").substring(params.get("post_img_url").lastIndexOf(",") + 1);
-            String fileName = base64.substring(30, 50) + ".png";
+            String fileName = CodeGenerator.createCode();
             String folderPath = ConvenienceUtil.makeOrGetLobbyFolderURL(userUID);
             Path imgPath = Paths.get(folderPath, fileName);
             createImg(base64, imgPath);
